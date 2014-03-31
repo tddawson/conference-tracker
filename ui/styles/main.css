@@ -1,3 +1,14 @@
+h1, h2, h3, h4 {
+	font-family: "Roboto Condensed";
+}
+
+h1 {
+	font-size: 28px;
+	line-height:1em;
+	color:#fff;
+	font-weight: bold;
+}
+
 h2 {
 	font-size: 2rem;
 	font-weight: bolder;
@@ -6,8 +17,15 @@ h2 {
 	float:left;
 }
 
-h2:first-child {
-	margin-top:.25em;
+h3 {
+	font-size:1.5rem;
+}
+
+h4 {
+	font-weight:normal;
+	font-style: italic;
+	color: #686868;
+	font-size:1.2em;
 }
 
 body {
@@ -23,6 +41,7 @@ body {
 #sub-navigation {
 	background:#024959;
 	padding-top:1em;
+	border-radius:0px 0px 3px 3px;
 }
 
 #sub-navigation > div {
@@ -36,6 +55,7 @@ body {
 	background:#037E8C;
 	font-size:1.2em;
 	font-weight:bold;
+	border-radius:3px 3px 0px 0px;
 }
 
 #sub-navigation > div > a.current-nav {
@@ -55,9 +75,15 @@ body {
 	background:#E74C30;
 	color:#FFFFFF;
 	padding:.5em 1em;
+	float:right;
+	border-radius:3px;
 }
 
 #main {
+
+}
+
+#main > div {
 	margin-top:1em;
 }
 
@@ -67,21 +93,35 @@ body {
 	float: left;
 	width: 100%;
 	margin: 0 0 1em 0;
+	border-radius:3px;
 }
 
 .content-link.condensed {
 	margin:0;
+	border-radius:0px;
+}
+
+.content-link.condensed:first-of-type {
+	border-top-left-radius:3px;
+	border-top-right-radius:3px;
+}
+
+.content-link.condensed:last-of-type {
+	border-bottom-left-radius:3px;
+	border-bottom-right-radius:3px;
 }
 
 .content-link h4 {
-	font-weight:normal;
-	font-style: italic;
-	color: #686868;
-	font-size:.9em;
+	font-style: normal;
+	font-size:1em;
 	padding-top:.5em;
 	line-height:.8em;
 }
 
+.content-option i {
+	float:left;
+	padding:.5em;
+}
 
 .progress-tracker {
 	background: #6ca;
@@ -97,7 +137,7 @@ body {
 }
 
 span::after {
-	content: "50%";
+	content: "50% (10/20)";
 	float: right;
 	color: #6ca;
 	margin-top: -1em;
@@ -128,6 +168,7 @@ span.low-percent::after { content:"6%";}
 	padding: 1em .5em;
 	text-align: center;
 	margin: .25em;
+	border-radius:3px;
 }
 .unchecked * {
 	opacity: .75
