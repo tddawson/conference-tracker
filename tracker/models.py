@@ -1,9 +1,10 @@
+from django.contrib.auth.models import User
 from django.db import models
 
-# Create your models here.
-class User(models.Model):
-	username = models.CharField(max_length = 200)
-	email = models.CharField(max_length = 200)
+# SiteUser instead of User because Django's auth system already has a notion of User
+class SiteUser(models.Model):
+	user = models.OneToOneField(User)
+	# Now we can extend their User (which houses basic username, password, email, etc)
 
 class Author(models.Model):
 	name = models.CharField(max_length = 200)
@@ -26,10 +27,9 @@ class ContentURI(models.Model):
 	contentItem = models.ForeignKey(ContentItem)
 
 class Completion(models.Model):
-	user = models.ForeignKey(User)
+	user = models.ForeignKey(SiteUser)
 	dateCompleted = models.DateTimeField('Date Completed')
 	content = models.OneToOneField(ContentItem)
 
 
-	
-	
+
