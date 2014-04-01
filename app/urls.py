@@ -9,6 +9,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # Pass main control over to the tracker views
-    url(r'^$', include('tracker.urls')),
-    url(r'^home/', 'tracker.views.home', name='home'),
+    url(r'^', include('tracker.urls')),
 )
