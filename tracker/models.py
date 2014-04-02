@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'
+
 # SiteUser instead of User because Django's auth system already has a notion of User
 class SiteUser(models.Model):
 	user = models.OneToOneField(User)

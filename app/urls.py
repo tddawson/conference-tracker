@@ -10,4 +10,5 @@ urlpatterns = patterns('',
 
     # Pass main control over to the tracker views
     url(r'^', include('tracker.urls')),
-)
+    
+ )

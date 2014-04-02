@@ -1,0 +1,24 @@
+{% load staticfiles %}
+<!Doctype HTML>
+<html>
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Domine|Roboto+Condensed' rel='stylesheet' type='text/css'>
+	<link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	<link href="{% static "libs/foundation/css/foundation.min.css" %}" rel="stylesheet" />
+	<link href="{% static "styles/main.css" %}" rel="stylesheet" />
+	{% block styles %}{% endblock %}
+	{% block scripts %}{% endblock %}
+	<title>{% block title %}Gospel Study Tracker{% endblock %}</title>
+</head>
+<body>
+<div class="row" id="header">
+  <div class="small-4 large-10 columns"><h1>Logo</h1></div>
+  <div class="small-4 large-1 columns" id="home-button"><i class="fa fa-home fa-2x"></i></div>
+  <div class="small-4 large-1 columns" id="account"><a href="" class="attention-link">Login</a></div>
+</div>
+{% block sub_navigation %}{% endblock %}
+<div id="main" class="row">
+{% block content %}{% endblock %}
+</div>
+</body>
+</html>

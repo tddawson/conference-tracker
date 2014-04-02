@@ -1,0 +1,59 @@
+{% extends "tracker/base.html" %}
+{% load static %}
+
+{% block title %} Gospel Study Tracker App {% endblock %}
+
+{% block content %}
+	<img src="{% static "images/temple.jpg" %}" />
+	<div style="position:relative;">
+	<div id="home-blurb" class="small-6 small-offset-6">	
+		<h2>Easily track, discover, and share gospel content.</h2>
+		<a class="attention-link explore-link green">Get started &raquo;</a>
+	</div>
+	</div>
+	<div class="small-12 large-6 columns">
+		<h2>Popular Now</h2>
+		<div class="condensed content-link">
+			<div class="columns small-12">
+				<h3>Welcome to Conference</h3>
+				<h4>President Thomas S. Monson</h4>
+			</div>
+		</div>
+
+		<div class="condensed content-link">
+			<div class="columns small-12">
+				<h3>Do We Know What We Have?</h3>
+				<h4>Carole M. Stephens</h4>
+			</div>
+		</div>
+		
+		<div class="condensed content-link">
+			<div class="columns small-12">
+				<h3>Look Ahead and Believe</h3>
+				<h4>Elder Edward Dube</h4>
+			</div>
+		</div>
+	</div>
+	<div class="small-12 large-6 columns">
+		<h2>Browse General Conference</h2>
+		<div class="condensed content-link">
+			<div class="columns small-10">
+				<h3>By Session</h3>
+			</div>
+		</div>
+
+		<div class="condensed content-link">
+			<div class="columns small-12">
+				<h3>By Speaker</h3>
+			</div>
+		</div>
+		
+		<div class="condensed content-link">
+			<div class="columns small-12">
+				<h3>By Topic</h3>
+			</div>
+		</div>
+		<a class="explore-link attention-link columns small-4 end" style="margin-top:20px;	">Explore All Talks &raquo;</a>
+	</div>
+
+{% endblock %}

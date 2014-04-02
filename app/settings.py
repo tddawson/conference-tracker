@@ -26,9 +26,24 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Information about our Facebook App (used to connect)
+FACEBOOK_APP_ID = "1402054483400570"
+FACEBOOK_SECRET_KEY = "4ca2633e0529f80e76e72cf44ba3bb08"
+
+# Optionally set default permissions to request, e.g: ['email', 'user_about_me']
+FACEBOOK_SCOPE = []
+
+# And for local debugging, use one of the debug middlewares and set:
+FACEBOOK_DEBUG_TOKEN = ''
+FACEBOOK_DEBUG_UID = ''
+FACEBOOK_DEBUG_COOKIE = ''
+FACEBOOK_DEBUG_SIGNEDREQ = ''
+
+# Optionally throw exceptions instead of returning HTTP errors on signed request issues
+FACEBOOK_RAISE_SR_EXCEPTIONS = True
+
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,9 +51,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'tracker'
+    'tracker',
+    'django_facebook'
 )
-
+'''
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,6 +63,25 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.core.context_processors.tz',
+    'django.core.context_processors.request',
+    'django.contrib.messages.context_processors.messages',
+    'django_facebook.context_processors.facebook',
+)
+
+AUTHENTICATION_BACKENDS = (
+    'django_facebook.auth_backends.FacebookBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+'''
+
 
 ROOT_URLCONF = 'app.urls'
 
