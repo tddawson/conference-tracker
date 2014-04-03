@@ -16,17 +16,26 @@ class Tag(models.Model):
 
 class Folder(models.Model):
 	name = models.CharField(max_length =200) 
+	parentFolder = models.ForeignKey('Folder', null = True)
 
 class ContentItem(models.Model):
-	title = models.CharField(max_length = 200)
-	author = models.ForeignKey(Author)
+	#title = models.CharField(max_length = 200)
+	#author = models.ForeignKey(Author)
 	folder = models.ForeignKey(Folder)
 	tags = models.ManyToManyField(Tag)
 
-class ContentURI(models.Model):
+class Link(models.Model):
+	type = models.CharField(max_length = 10)
 	URI = models.CharField(max_length = 200)
-	contentType = models.CharField(max_length = 10)
 	contentItem = models.ForeignKey(ContentItem)
+
+class Author(models.Model):
+	name = models.CharField(max_length = 200)
+
+class ConfrenceTalk(ContentItem):
+	title = models.CharField(max_length = 200)
+	author = models.ForeignKey(Author)
+
 
 class Completion(models.Model):
 	user = models.ForeignKey(SiteUser)
