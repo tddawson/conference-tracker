@@ -40,6 +40,7 @@ class ContentItem(models.Model):
 	folder = models.ForeignKey(Folder)
 	tags = models.ManyToManyField(Tag)
 
+
 class Link(models.Model):
 	type = models.CharField(max_length = 10)
 	URI = models.CharField(max_length = 200)
@@ -59,6 +60,3 @@ class Completion(models.Model):
 	user = models.ForeignKey(SiteUser)
 	dateCompleted = models.DateTimeField('Date Completed')
 	content = models.OneToOneField(ContentItem)
-
-
-

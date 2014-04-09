@@ -47,4 +47,19 @@ def conference_talks_by_speaker(request, speaker):
 	talks = ConferenceTalk.objects.filter(author__name=speaker)
 
 	context = {'talks': talks, 'folder': speaker}
-	return render(request, 'tracker/choose_talk.html', context)	
+	return render(request, 'tracker/choose_talk.html', context)
+
+
+def conference_talks_by_topic(request, topic):
+	talks = ConferenceTalk.objects.filter(tags__name__in=[topic])
+
+	context = {'talks': talks, 'folder': topic}
+	return render(request, 'tracker/choose_talk.html', context)
+
+
+def conference_talk(request, talk):
+	talk = ConferenceTalk.objects.filter(title=talk)[0]
+
+	context = {'talk': talk}
+	return render(request, 'tracker/talk.html', context)
+

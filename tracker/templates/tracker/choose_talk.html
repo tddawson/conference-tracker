@@ -21,10 +21,12 @@
 {% for talk in talks %}
   <div class="small-12 large-6 columns end">
     <div class="content-link">
-      <div class="columns small-10">
-        <h3>{{ talk.title }}</h3>
-        <h4>{{ talk.author }}</h4>
-      </div>
+      <a href="/general-conference/talks/{{talk.title}}">
+        <div class="columns small-10">
+          <h3>{{ talk.title }}</h3>
+          <h4>{{ talk.author }}</h4>
+        </div>
+      </a>
       <div class="unchecked columns small-2">
         <i class="fa fa-check fa-4x"></i>
       </div>
