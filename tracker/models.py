@@ -8,15 +8,31 @@ class SiteUser(models.Model):
 	user = models.OneToOneField(User)
 	# Now we can extend their User (which houses basic username, password, email, etc)
 
+	def __unicode__(self):
+		return user.name
+
+
 class Author(models.Model):
 	name = models.CharField(max_length = 200)
+
+	def __unicode__(self):
+		return self.name
+
 
 class Tag(models.Model):
 	name = models.CharField(max_length = 200)
 
+	def __unicode__(self):
+		return self.name
+
+
 class Folder(models.Model):
 	name = models.CharField(max_length =200) 
-	parentFolder = models.ForeignKey('Folder', null = True)
+	parentFolder = models.ForeignKey('Folder', null = True, blank = True)
+
+	def __unicode__(self):
+		return self.name
+
 
 class ContentItem(models.Model):
 	#title = models.CharField(max_length = 200)
@@ -29,13 +45,15 @@ class Link(models.Model):
 	URI = models.CharField(max_length = 200)
 	contentItem = models.ForeignKey(ContentItem)
 
-class Author(models.Model):
-	name = models.CharField(max_length = 200)
+	def __unicode__(self):
+		return self.uri
 
-class ConfrenceTalk(ContentItem):
+class ConferenceTalk(ContentItem):
 	title = models.CharField(max_length = 200)
 	author = models.ForeignKey(Author)
 
+	def __unicode__(self):
+		return self.title
 
 class Completion(models.Model):
 	user = models.ForeignKey(SiteUser)

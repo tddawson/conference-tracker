@@ -9,6 +9,8 @@ h1 {
 	font-weight: bold;
 }
 
+h1 a { color:#eee; } h1 a:hover { color:#fff; }
+
 h2 {
 	font-size: 2rem;
 	font-weight: bolder;
@@ -29,8 +31,9 @@ h4 {
 }
 
 body {
-	background:#F2EFDC;
+	background:#F2EFEC;
 }
+
 
 #header {
 	background:#363636;
@@ -60,10 +63,10 @@ body {
 
 #sub-navigation > div > a.current-nav {
 	color:#363636;
-	background:#F2EFDC;
+	background:#F2EFEC;
 }
 
-#sub-navigation > div > a.current-nav:hover { background: #F2EFDC ;}
+#sub-navigation > div > a.current-nav:hover { background: #F2EFEC ;}
 
 #sub-navigation > div > a:hover {
 	background:#239EAC;
@@ -72,6 +75,14 @@ body {
 
 #home-button {
 	text-align:center;
+}
+
+#home-button a {
+	color:#eee;
+}
+
+#home-button a:hover {
+	color:#fff;
 }
 
 #account {
