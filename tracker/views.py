@@ -36,3 +36,15 @@ def conference_topics(request):
 	context = {'categories': topics, "sort_by": "topic"}
 	return render(request, 'tracker/explore_conference.html', context)
 
+
+def conference_talks_by_session(request, session):
+	talks = ConferenceTalk.objects.filter(folder__name=session)
+
+	context = {'talks': talks, 'folder': session}
+	return render(request, 'tracker/choose_talk.html', context)
+
+def conference_talks_by_speaker(request, speaker):
+	talks = ConferenceTalk.objects.filter(author__name=speaker)
+
+	context = {'talks': talks, 'folder': speaker}
+	return render(request, 'tracker/choose_talk.html', context)	
