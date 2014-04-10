@@ -1,6 +1,7 @@
 #Set up the Django enviornment and import the data models
 import urllib2
 import json
+import shutil
 
 import sys, os
 sys.path.append('app/')
@@ -9,23 +10,27 @@ from django.conf import settings
 
 from tracker.models import *
 
-
 req = urllib2.Request(url='https://tech.lds.org/mc/api/conference/list',
 						data='LanguageID=1')
 
 
 
 Conferences = json.loads(urllib2.urlopen(req).read())['Conferences']
-
-GeneralConferenceFolder = Folder(name = "General Conference")
-GeneralConferenceFolder.save()
+try:
+	GeneralConferenceFolder = Folder.objects.get(name = "General Conference")
+except:
+	GeneralConferenceFolder = Folder(name = "General Conference")
+	GeneralConferenceFolder.save()
 
 
 for conference in Conferences:
-	#print conference['Title']
-
-	ConferenceFolder = Folder(name = conference['Title'], parentFolder = GeneralConferenceFolder)
-	ConferenceFolder.save()
+	print conference['Title']
+	try:
+		ConferenceFolder = Folder.objects.get(name= conference['Title'])
+		continue
+	except:
+		ConferenceFolder = Folder(name = conference['Title'], parentFolder = GeneralConferenceFolder)
+		ConferenceFolder.save()
 
 	req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/sessionlist',
 							data = 'ConferenceID='+str(conference['ID']))
@@ -33,10 +38,9 @@ for conference in Conferences:
 	Sessions = json.loads(urllib2.urlopen(req).read())['Sessions']
 
 	for session in Sessions:
-		#print session['Title']
 
 		SessionFolder = Folder(name = session['Title'], parentFolder = ConferenceFolder)
-		
+
 		SessionFolder.save()
 
 		req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/talklist',
@@ -66,4 +70,4 @@ for conference in Conferences:
 					l.save()
 
 			except:
-				break
+				continue
