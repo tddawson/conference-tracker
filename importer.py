@@ -8,6 +8,8 @@ sys.path.append('app/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
 
+authorsToSkip = ["presented by", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
+
 from tracker.models import *
 
 req = urllib2.Request(url='https://tech.lds.org/mc/api/conference/list',
@@ -27,6 +29,7 @@ for conference in Conferences:
 	print conference['Title']
 	try:
 		ConferenceFolder = Folder.objects.get(name= conference['Title'])
+		print "Session Already Imported"
 		continue
 	except:
 		ConferenceFolder = Folder(name = conference['Title'], parentFolder = GeneralConferenceFolder)
@@ -54,8 +57,20 @@ for conference in Conferences:
 				try:
 					a = Author.objects.get(name=authorName)
 				except:
-					a = Author(name = authorName)
-					a.save()
+
+					skipAuthor = False
+					for auth in authorsToSkip:
+						
+						if auth in authorName.lower():
+							skipAuthor = True
+							break
+
+					if skipAuthor == True:
+						continue
+					else:
+						a = Author(name = authorName)
+						a.save()
+
 
 				confTalk = ConferenceTalk(title = talk['Title'],
 										 folder = SessionFolder, 
