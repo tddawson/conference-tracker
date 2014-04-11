@@ -9,7 +9,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 from django.conf import settings
 
 authorsToSkip = ["presented by", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
-
+namePrefixes = ["presiden", "elder", "sister", "brother", "bishop"]
 from tracker.models import *
 
 req = urllib2.Request(url='https://tech.lds.org/mc/api/conference/list',
@@ -54,6 +54,14 @@ for conference in Conferences:
 		for talk in Talks:
 			try:
 				authorName = talk['Persons'][0]['Name']
+				names = authorName.split(' ', 1)
+
+				for prefix in namePrefixes:
+				
+					if prefix in names[0].lower():
+
+						authorName = names[1]
+
 				try:
 					a = Author.objects.get(name=authorName)
 				except:
