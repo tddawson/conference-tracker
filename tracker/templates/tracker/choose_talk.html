@@ -1,6 +1,11 @@
 {% extends "tracker/base.html" %}
+{% load static %}
 
 {% block title %} General Conference - All talks from {{ folder }} {% endblock %}
+
+{% block scripts %}
+<script src="{% static "scripts/complete.js" %}"></script>
+{% endblock %}
 
 {% block sub_navigation %}
 <div id="sub-navigation" class="row">
@@ -27,9 +32,12 @@
           <h4>{{ talk.author }}</h4>
         </div>
       </a>
+      <a id="check-{{ talk.pk }}" class="check-link" style="display:block">
       <div class="unchecked columns small-2">
         <i class="fa fa-check fa-4x"></i>
       </div>
+      </a>
+
     </div>
   </div>
 {% endfor %}

@@ -5,6 +5,7 @@ from tracker import views
 urlpatterns = patterns('',
 	url(r'^$', views.home, name='home'),
     url(r'^home/', views.home, name='home'),
+    url(r'^complete/(?P<content_id>\d+)/$', views.mark_complete, name='mark_complete'),
     url(r'^general-conference/$', views.conference_sessions, name='conference_sessions'),
     url(r'^general-conference/sessions/$', views.conference_sessions, name='conference_sessions'),
     url(r'^general-conference/sessions/(?P<session>[\w\s]+)/$', views.conference_talks_by_session, name='conference_talks_by_session'),

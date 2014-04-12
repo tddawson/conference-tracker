@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'
+#AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'
 
 # SiteUser instead of User because Django's auth system already has a notion of User
 class SiteUser(models.Model):
@@ -9,7 +9,7 @@ class SiteUser(models.Model):
 	# Now we can extend their User (which houses basic username, password, email, etc)
 
 	def __unicode__(self):
-		return user.name
+		return self.user.username
 
 
 class Author(models.Model):

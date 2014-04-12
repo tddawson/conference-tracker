@@ -1,14 +1,9 @@
 from django.shortcuts import render
-
-from tracker.models import SiteUser
-from tracker.models import Author
-from tracker.models import Tag
-from tracker.models import Folder
-from tracker.models import ContentItem
-from tracker.models import Link
-from tracker.models import Author
-from tracker.models import ConferenceTalk
-from tracker.models import Completion
+from django.http import HttpResponse
+from django.contrib.auth.models import User
+from tracker.models import *
+from datetime import datetime 
+import sys
 
 def home(request):
 	sample_list = ["one", "two", "three"]
@@ -36,7 +31,6 @@ def conference_topics(request):
 	context = {'categories': topics, "sort_by": "topic"}
 	return render(request, 'tracker/explore_conference.html', context)
 
-
 def conference_talks_by_session(request, session):
 	talks = ConferenceTalk.objects.filter(folder__name=session)
 
@@ -63,3 +57,27 @@ def conference_talk(request, talk):
 	context = {'talk': talk}
 	return render(request, 'tracker/talk.html', context)
 
+
+def mark_complete(request, content_id):
+	'''
+	Just hard-coded admin username in for now.
+	Still needs to:
+	- Get user if logged in. If not, return a failed response.
+	- In the choose_talk template we need to set 'checked' or 'unchecked' style based on db.
+	'''
+	try: 
+		user = SiteUser.objects.get(user__username="tracker")
+		date = datetime.now()
+		talk = ConferenceTalk.objects.get(pk=content_id)
+
+		if len(Completion.objects.filter(user=user, content=talk)) > 0:
+			#Already saved... we'll allow it for now.
+			return HttpResponse("Success")
+
+		completion = Completion(user=user, dateCompleted=date, content=talk)
+		completion.save()
+	except:
+		e = sys.exc_info()[0]
+		return HttpResponse(e)
+
+	return HttpResponse("Success")
