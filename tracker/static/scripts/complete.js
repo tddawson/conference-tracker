@@ -9,7 +9,7 @@ $(document).ready(function() {
 function markComplete(id) {
 	showWaitingIcon(id);
 	$.ajax({
-		url: "/complete/" + id + "/",
+		url: "/markcomplete/" + id + "/",
 		success: function(data) {
 			resetCheckIcon(id);
 			if (data=="Success") {

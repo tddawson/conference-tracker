@@ -3,15 +3,6 @@ from django.db import models
 
 #AUTH_USER_MODEL = 'django_facebook.FacebookCustomUser'
 
-# SiteUser instead of User because Django's auth system already has a notion of User
-class SiteUser(models.Model):
-	user = models.OneToOneField(User)
-	# Now we can extend their User (which houses basic username, password, email, etc)
-
-	def __unicode__(self):
-		return self.user.username
-
-
 class Author(models.Model):
 	name = models.CharField(max_length = 200)
 
@@ -57,6 +48,6 @@ class ConferenceTalk(ContentItem):
 		return self.title
 
 class Completion(models.Model):
-	user = models.ForeignKey(SiteUser)
+	user = models.ForeignKey(User)
 	dateCompleted = models.DateTimeField('Date Completed')
 	content = models.OneToOneField(ContentItem)

@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from tracker.models import *
 from datetime import datetime 
 import sys
@@ -40,7 +41,13 @@ def conference_talks_by_session(request, session):
 def conference_talks_by_speaker(request, speaker):
 	talks = ConferenceTalk.objects.filter(author__name=speaker)
 
-	context = {'talks': talks, 'folder': speaker}
+	if request.user.is_authenticated():
+		user = User.objects.get(pk=request.user.id)
+		pk = user.pk
+	completed_items = Completion.objects.filter(user__pk=pk)
+	pks = [item.content.pk for item in completed_items]
+
+	context = {'talks': talks, 'folder': speaker, 'pks': pks,  'user': user}
 	return render(request, 'tracker/choose_talk.html', context)
 
 
@@ -59,14 +66,11 @@ def conference_talk(request, talk):
 
 
 def mark_complete(request, content_id):
-	'''
-	Just hard-coded admin username in for now.
-	Still needs to:
-	- Get user if logged in. If not, return a failed response.
-	- In the choose_talk template we need to set 'checked' or 'unchecked' style based on db.
-	'''
 	try: 
-		user = SiteUser.objects.get(user__username="tracker")
+		if request.user.is_authenticated():
+			user = User.objects.get(pk=request.user.id)
+		else:
+			return HttpResponse("You are not logged in!")
 		date = datetime.now()
 		talk = ConferenceTalk.objects.get(pk=content_id)
 
@@ -81,3 +85,10 @@ def mark_complete(request, content_id):
 		return HttpResponse(e)
 
 	return HttpResponse("Success")
+
+def profile(request):
+	if request.user.is_authenticated():
+		user = User.objects.get(pk=request.user.id)
+		return HttpResponse("You logged in as: %s" % (user))
+	else:
+		return HttpResponse("You failed to log in... Sorry!")
