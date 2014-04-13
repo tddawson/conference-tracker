@@ -7,13 +7,14 @@
 	<link href="{% static "libs/foundation/css/foundation.min.css" %}" rel="stylesheet" />
 	<link href="{% static "styles/main.css" %}" rel="stylesheet" />
 	{% block styles %}{% endblock %}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 	{% block scripts %}{% endblock %}
 	<title>{% block title %}Gospel Study Tracker{% endblock %}</title>
 </head>
 <body>
 <div class="row" id="header">
-  <div class="small-4 large-10 columns"><h1>Logo</h1></div>
-  <div class="small-4 large-1 columns" id="home-button"><i class="fa fa-home fa-2x"></i></div>
+  <div class="small-4 large-10 columns"><h1><a href="/">Logo</a></h1></div>
+  <div class="small-4 large-1 columns" id="home-button"><a href="/home/"><i class="fa fa-home fa-2x"></i></a></div>
   <div class="small-4 large-1 columns" id="account"><a href="" class="attention-link">Login</a></div>
 </div>
 {% block sub_navigation %}{% endblock %}

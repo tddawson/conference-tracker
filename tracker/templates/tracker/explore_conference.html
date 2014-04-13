@@ -1,0 +1,35 @@
+{% extends "tracker/base.html" %}
+
+{% block title %} General Conference - Sort by {{ sort_by }} {% endblock %}
+
+{% block sub_navigation %}
+<div id="sub-navigation" class="row">
+    <div class="small-4 large-2 columns">
+      <a href="/general-conference/sessions/"{% if sort_by == "session" %} class="current-nav" {% endif %}>Sessions</a>
+    </div>
+    <div class="small-4 large-2 columns">
+      <a href="/general-conference/speakers/"{% if sort_by == "speaker" %} class="current-nav" {% endif %}>Speaker</a>
+    </div>
+    <div class="small-4 large-2 columns end">
+      <a href="/general-conference/topics/"{% if sort_by == "topic" %} class="current-nav" {% endif %}>Topic</a>
+    </div>  
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<h2 class="columns small-12">Choose a {{ sort_by }}</h2>
+{% for category in categories %}
+<a href="/general-conference/{{ sort_by }}s/{{ category }}/">
+  <div class="columns small-12 large-6 end">  
+    <div class="content-link">
+      <div class="columns small-12">
+          <h3>{{ category }}</h3></a>
+      </div>
+      <span class="progress-tracker"></span>
+    </div>
+  </div>
+</a>
+
+{% endfor %}
+
+{% endblock %}
