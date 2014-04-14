@@ -33,7 +33,7 @@ def conference_topics(request):
 	return render(request, 'tracker/explore_conference.html', context)
 
 def conference_talks_by_session(request, session):
-	talks = ConferenceTalk.objects.filter(folder__name=session)
+	talks = ConferenceTalk.objects.filter(folder__parentFolder__name=session)
 
 	context = {'talks': talks, 'folder': session}
 	return render(request, 'tracker/choose_talk.html', context)

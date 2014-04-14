@@ -12,7 +12,7 @@
     </div>
     <div class="small-4 large-2 columns end">
       <a href="/general-conference/topics/">Topic</a>
-    </div>  
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -20,23 +20,25 @@
 <h2 class="small-12 columns">{{ talk.title }}</h2>
 <h4 class="small-12 columns">{{ talk.author }}</h4>
 
-
 <div class="small-12 large-6 columns">
     <object id="flashObj" width="480" height="270" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=9,0,47,0"><param name="movie" value="http://c.brightcove.com/services/viewer/federated_f9?isVid=1&isUI=1" /><param name="bgcolor" value="#FFFFFF" /><param name="flashVars" value="videoId=2721983168001&linkBaseURL=https%3A%2F%2Fwww.lds.org%2Fgeneral-conference%2F2013%2F10%2Fcome-join-with-us%3Flang%3Deng%23watch%3Dvideo&playerID=1202881497001&playerKey=AQ~~,AAABFr5dynE~,TSPthyn9f7zkbxtdRs4CICkEwMD-g6pb&domain=embed&dynamicStreaming=true" /><param name="base" value="http://admin.brightcove.com" /><param name="seamlesstabbing" value="false" /><param name="allowFullScreen" value="true" /><param name="swLiveConnect" value="true" /><param name="allowScriptAccess" value="always" /><embed src="http://c.brightcove.com/services/viewer/federated_f9?isVid=1&isUI=1" bgcolor="#FFFFFF" flashVars="videoId=2721983168001&linkBaseURL=https%3A%2F%2Fwww.lds.org%2Fgeneral-conference%2F2013%2F10%2Fcome-join-with-us%3Flang%3Deng%23watch%3Dvideo&playerID=1202881497001&playerKey=AQ~~,AAABFr5dynE~,TSPthyn9f7zkbxtdRs4CICkEwMD-g6pb&domain=embed&dynamicStreaming=true" base="http://admin.brightcove.com" name="flashObj" width="480" height="270" seamlesstabbing="false" type="application/x-shockwave-flash" allowFullScreen="true" allowScriptAccess="always" swLiveConnect="true" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"></embed></object>
   </div>
-  <div class="small-6 large-4 columns">
-    <div class="content-link content-option">
-      <i class="fa fa-file-text-o fa-lg"></i>
-      <h3>Read</h3>
-    </div>
-  </div>
-  <div class="small-6 large-4 columns">
-    <div class="content-link content-option">
-      <i class="fa fa-headphones fa-lg"></i>
-      <h3>Listen</h3>
-    </div>
-  </div>
-
+  {% for link in talk.smallLinks %}
+     <a href="{{ link.URI }}" class="small-6 large-4 columns">
+        <div>
+            <div class="content-link content-option">
+                {% if link.format.type = 'Audio' %}
+                 <i class="fa fa-headphones fa-lg"></i>
+                {% elif link.format.type = 'Text' %}
+                 <i class="fa fa-file-text-o fa-lg"></i>
+                {% elif link.format.type = 'Video' %}
+                 <i class="fa fa-play-circle fa-lg"></i>
+                {% endif %}
+                <h3>{{ link.action }}</h3>
+            </div>
+        </div>
+    </a>
+  {% endfor %}
 
     <div class="small-12 columns"></div>
   <div class="small-12 large-4 columns">
