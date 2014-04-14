@@ -87,9 +87,16 @@ for conference in Conferences:
 				confTalk.save()
 
 				for media in talk['Media']:
-					l = Link(type = media['MediaContainer'],
-					         URI = media['URL'],
-					         contentItem = confTalk)
+					try:
+						contentFormat = ContentFormat.objects.get(container = media['MediaContainer'])
+					except:
+						contentFormat = ContentFormat(  type = media['MediaType'],
+														container = media['MediaContainer'])
+						contentFormat.save()
+
+					l = Link(format = contentFormat,
+							 URI = media['URL'],
+							 contentItem = confTalk)
 					l.save()
 
 			except:
