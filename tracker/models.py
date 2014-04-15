@@ -67,6 +67,12 @@ class ConferenceTalk(ContentItem):
     def smallLinks(self):
         return self.link_set.filter(~Q(format__container='YouTube'))
 
+    def youTubeEmbedLink(self):
+        link = self.link_set.filter(format__container='YouTube').first().URI
+        uniqueId = link[31:]
+        embedLink = '//www.youtube.com/embed/' + uniqueId
+        return embedLink
+
 class Completion(models.Model):
     user = models.ForeignKey(User)
     dateCompleted = models.DateTimeField('Date Completed')
