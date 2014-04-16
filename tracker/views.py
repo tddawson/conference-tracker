@@ -10,9 +10,7 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib.auth import logout as auth_logout
 
 def home(request):
-	sample_list = ["one", "two", "three"]
-	context = {'var_name': sample_list}
-	return render(request, 'tracker/home.html', context)
+	return render(request, 'tracker/home.html', {})
 
 
 def conference_sessions(request):
@@ -102,6 +100,10 @@ def mark_complete(request, content_id):
 	return HttpResponse("Added")
 
 def profile(request):
+	"""After logging in"""
+	return render(request, 'tracker/home.html', {})
+	
+	"""Should display differently depending on if they are logged in."""
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
 		return HttpResponse("You logged in as: %s" % (user))
@@ -110,6 +112,7 @@ def profile(request):
 
 
 def logout(request):
-    """Logs out user"""
-    auth_logout(request)
-    return render_to_response('tracker/home.html', {}, RequestContext(request))
+	"""Logs out user"""
+	auth_logout(request)
+	return render_to_response('tracker/home.html', {}, RequestContext(request))
+
