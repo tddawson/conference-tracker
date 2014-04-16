@@ -12,8 +12,11 @@ function markComplete(id) {
 		url: "/markcomplete/" + id + "/",
 		success: function(data) {
 			resetCheckIcon(id);
-			if (data=="Success") {
+			if (data=="Added") {
 				showCompleted(id);
+			}
+			else if (data=="Deleted") {
+				showIncompleted(id);
 			}
 			else {
 				console.error("There was an error saving:");
@@ -35,9 +38,13 @@ function showWaitingIcon(id) {
 }
 
 function showCompleted(id) {
-	console.log("DONE: " + id);
 	$('#check-' + id + " > div").removeClass('unchecked');
 	$('#check-' + id + " > div").addClass('checked');
+}
+
+function showIncompleted(id) {
+	$('#check-' + id + ' > div').removeClass('checked');
+	$('#check-' + id + ' > div').addClass('unchecked');
 }
 
 function resetCheckIcon(id) {

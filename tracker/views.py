@@ -44,8 +44,12 @@ def conference_talks_by_speaker(request, speaker):
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
 		pk = user.pk
-	completed_items = Completion.objects.filter(user__pk=pk)
-	pks = [item.content.pk for item in completed_items]
+		completed_items = Completion.objects.filter(user__pk=pk)
+		pks = [item.content.pk for item in completed_items]
+	else:
+		pks = []
+		user = User()
+
 
 	context = {'talks': talks, 'folder': speaker, 'pks': pks,  'user': user}
 	return render(request, 'tracker/choose_talk.html', context)
@@ -74,17 +78,20 @@ def mark_complete(request, content_id):
 		date = datetime.now()
 		talk = ConferenceTalk.objects.get(pk=content_id)
 
-		if len(Completion.objects.filter(user=user, content=talk)) > 0:
-			#Already saved... we'll allow it for now.
-			return HttpResponse("Success")
-
+		if len(Completion.objects.filter(user=user, content=talk)) == 1:
+			#Already saved, mark as incomplete.
+			c = Completion.objects.get(user=user, content=talk)
+			c.delete()
+			return HttpResponse("Deleted")
+		
+		# No completed item recorded, save it!
 		completion = Completion(user=user, dateCompleted=date, content=talk)
 		completion.save()
 	except:
 		e = sys.exc_info()[0]
 		return HttpResponse(e)
 
-	return HttpResponse("Success")
+	return HttpResponse("Added")
 
 def profile(request):
 	if request.user.is_authenticated():
