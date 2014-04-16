@@ -16,10 +16,13 @@ class Importer:
         self.namePrefixes = ["president", "elder", "sister", "brother", "bishop"]
 
     def run(self):
-        logging.info("Importing")
-        req = urllib2.Request(url='https://tech.lds.org/mc/api/conference/list',
+        conferenceListEndpoint = 'https://tech.lds.org/mc/api/conference/list'
+        logging.info("Importing from {}".format(conferenceListEndpoint))
+        req = urllib2.Request(url=conferenceListEndpoint,
 						        data='LanguageID=1')
-        Conferences = json.loads(urllib2.urlopen(req).read())['Conferences']
+
+        conferenceList = self.getResponseJson(req)
+        Conferences = conferenceList['Conferences']
         try:
             GeneralConferenceFolder = Folder.objects.get(name = "General Conference")
         except:
@@ -28,10 +31,10 @@ class Importer:
 
 
         for conference in Conferences:
-            print conference['Title']
+            logging.info(conference['Title'])
             try:
                 ConferenceFolder = Folder.objects.get(name= conference['Title'])
-                print "Session Already Imported"
+                logging.info("Session Already Imported")
                 continue
             except:
                 ConferenceFolder = Folder(name = conference['Title'], parentFolder = GeneralConferenceFolder)
@@ -40,7 +43,7 @@ class Importer:
             req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/sessionlist',
                                     data = 'ConferenceID='+str(conference['ID']))
 
-            Sessions = json.loads(urllib2.urlopen(req).read())['Sessions']
+            Sessions = self.getResponseJson(req)['Sessions']
 
             for session in Sessions:
 
@@ -51,8 +54,8 @@ class Importer:
                 req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/talklist',
                                         data = 'SessionID='+str(session['ID']))
 
-                talkListContent = urllib2.urlopen(req).read()
-                Talks = json.loads(talkListContent)['Talks']
+                talkList = self.getResponseJson(req)
+                Talks = talkList['Talks']
 
                 for talk in Talks:
                     try:
@@ -110,7 +113,7 @@ class Importer:
                                                             container = 'LDS.org')
                             contentFormat.save()
 
-                        conf = talkListContent['Conference']
+                        conf = talkList['Conference']
                         year = conf['Year']
                         month = '{num:02d}'.format(num = conf['Month'])
                         scrubbedName = talk['Title']
@@ -122,6 +125,10 @@ class Importer:
                         '''
                     except:
                         continue
+
+    def getResponseJson(self, request):
+        response = urllib2.urlopen(request).read()
+        return json.loads(response)
 
 if __name__ == "__main__":
     importer = Importer()
