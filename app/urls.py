@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url('', include('social.apps.django_app.urls', namespace='social')),
+    url(r'^logout/$', 'tracker.views.logout'),
 
     # Pass main control over to the tracker views
     url(r'^', include('tracker.urls')),

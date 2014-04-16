@@ -5,6 +5,9 @@ from django.contrib.auth import authenticate
 from tracker.models import *
 from datetime import datetime 
 import sys
+from django.template import RequestContext
+from django.shortcuts import render_to_response, redirect
+from django.contrib.auth import logout as auth_logout
 
 def home(request):
 	sample_list = ["one", "two", "three"]
@@ -104,3 +107,9 @@ def profile(request):
 		return HttpResponse("You logged in as: %s" % (user))
 	else:
 		return HttpResponse("You failed to log in... Sorry!")
+
+
+def logout(request):
+    """Logs out user"""
+    auth_logout(request)
+    return render_to_response('tracker/home.html', {}, RequestContext(request))
