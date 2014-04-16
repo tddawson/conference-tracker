@@ -146,30 +146,6 @@ body {
 	padding:.5em;
 }
 
-.progress-tracker {
-	background: #6ca;
-	width: 50%;
-	height: 5px;
-	margin-top: 1em;
-	float: left;
-	clear:both;
-}
-
-.progress-tracker.low-percent {
-	width:6%;
-}
-
-span::after {
-	content: "50% (10/20)";
-	float: right;
-	color: #6ca;
-	margin-top: -1em;
-	font-weight: bold;
-	font-size:smaller;
-}
-
-span.low-percent::after { content:"6%";}
-
 .checked {
 	background: #66CCAA;
 	color: #fff;

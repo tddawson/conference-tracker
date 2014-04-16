@@ -1,6 +1,11 @@
 {% extends "tracker/base.html" %}
+{% load static %}
 
 {% block title %} General Conference - {{ talk.title }} {% endblock %}
+
+{% block scripts %}
+<script src="{% static "scripts/complete.js" %}"></script>
+{% endblock %}
 
 {% block sub_navigation %}
 <div id="sub-navigation" class="row">
@@ -22,7 +27,11 @@
 
 <div class="small-12 large-6 columns">
     <iframe width="420" height="315" src="{{ talk.youTubeEmbedLink }}" frameborder="0" allowfullscreen></iframe>
-  </div>
+</div>
+<div class="small-12 large-4 columns" style="margin-bottom:20px">
+	<div class="fb-like" data-href="{{ request.path }}" data-type="button_count" data-action="like" data-share="true" data-show-faces="true">
+	</div>
+</div>
   {% for link in talk.smallLinks %}
      <a href="{{ link.URI }}" class="small-6 large-4 columns">
         <div>
@@ -42,14 +51,16 @@
 
     <div class="small-12 columns"></div>
   <div class="small-12 large-4 columns">
+    <a id="check-{{ talk.pk }}" class="check-link" style="display:block">
     <div class="content-link">
       <div class="columns small-10">
         <h3>Mark as completed</h3>
       </div>
-      <div class="unchecked columns small-2 clear">
+      <div class="{% if completed  %}checked{% else %}unchecked{% endif %} columns small-2 clear check-box">
         <i class="fa fa-check fa-2x"></i>
       </div>
     </div>
+    </a>
   </div>
   <h2 class="small-12 columns">Explore</h2>
   <div class="small-12 large-4 columns end">

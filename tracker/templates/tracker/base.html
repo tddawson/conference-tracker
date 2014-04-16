@@ -12,6 +12,15 @@
 	<title>{% block title %}Gospel Study Tracker{% endblock %}</title>
 </head>
 <body>
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=585165484924345";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
 <div class="row" id="header">
   <div class="small-4 large-10 columns"><h1><a href="/">Logo</a></h1></div>
   <div class="small-4 large-1 columns" id="home-button"><a href="/home/"><i class="fa fa-home fa-2x"></i></a></div>

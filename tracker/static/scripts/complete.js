@@ -38,13 +38,13 @@ function showWaitingIcon(id) {
 }
 
 function showCompleted(id) {
-	$('#check-' + id + " > div").removeClass('unchecked');
-	$('#check-' + id + " > div").addClass('checked');
+	$('#check-' + id + ' div.check-box').removeClass('unchecked');
+	$('#check-' + id + ' div.check-box').addClass('checked');
 }
 
 function showIncompleted(id) {
-	$('#check-' + id + ' > div').removeClass('checked');
-	$('#check-' + id + ' > div').addClass('unchecked');
+	$('#check-' + id + ' div.check-box').removeClass('checked');
+	$('#check-' + id + ' div.check-box').addClass('unchecked');
 }
 
 function resetCheckIcon(id) {
