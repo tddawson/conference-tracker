@@ -16,12 +16,13 @@ class Importer:
         self.namePrefixes = ["president", "elder", "sister", "brother", "bishop"]
 
     def run(self):
-        conferenceListEndpoint = 'https://tech.lds.org/mc/api/conference/list'
-        logging.info("Importing from {}".format(conferenceListEndpoint))
-        req = urllib2.Request(url=conferenceListEndpoint,
-						        data='LanguageID=1')
+        logging.info("Importing General Conference")
 
+        conferenceListEndpoint = 'https://tech.lds.org/mc/api/conference/list'
+        logging.debug("Requesting {}".format(conferenceListEndpoint))
+        req = urllib2.Request(url=conferenceListEndpoint, data='LanguageID=1')
         conferenceList = self.getResponseJson(req)
+
         Conferences = conferenceList['Conferences']
         try:
             GeneralConferenceFolder = Folder.objects.get(name = "General Conference")
@@ -42,7 +43,8 @@ class Importer:
             ConferenceFolder = Folder(name = conference['Title'], parentFolder = generalConferenceFolder)
             ConferenceFolder.save()
 
-        req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/sessionlist',
+        sessionListEndpoint = 'http://tech.lds.org/mc/api/conference/sessionlist'
+        req = urllib2.Request(url = sessionListEndpoint,
                                 data = 'ConferenceID='+str(conference['ID']))
 
         Sessions = self.getResponseJson(req)['Sessions']
