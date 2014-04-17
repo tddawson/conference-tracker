@@ -10,7 +10,12 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib.auth import logout as auth_logout
 
 def home(request):
-	return render(request, 'tracker/home.html', {})
+	if request.user.is_authenticated():
+		user = User.objects.get(pk=request.user.id)
+		context = {"user":user}
+		return render(request, 'tracker/home_logged_in.html', context)
+	else:
+		return render(request, 'tracker/home.html', {})
 
 
 def conference_sessions(request):

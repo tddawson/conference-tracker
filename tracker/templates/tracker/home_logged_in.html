@@ -1,0 +1,54 @@
+{% extends "tracker/base.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<h2 class="columns small-12">Welcome, {{ user.username }}</h2>
+
+  <div class="small-12 large-6 columns">
+    <div>
+      <h2>Progress</h2>
+      <div class="condensed content-link">
+        <div class="columns small-8">
+          <h3>All Talks</h3>
+        </div>
+        <span class="progress-tracker low-percent"></span>
+      </div>
+    </div>
+    <div>
+      <h2>Recently Completed</h2>
+      <div class="condensed content-link">
+        <div class="columns small-10">
+          <h3>Do We Know What We Have?</h3>
+          <h4>Carole M. Stephens</h4>
+        </div>
+        <div class="checked columns small-2">
+          <i class="fa fa-check fa-4x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="small-12 large-6 columns">
+    <h2>Recommendations</h2>
+    <div class="condensed content-link">
+      <div class="columns small-10">
+        <h3>Welcome to Conference</h3>
+        <h4>President Thomas S. Monson</h4>
+      </div>
+      <div class="checked columns small-2">
+        <i class="fa fa-check fa-4x"></i>
+      </div>
+    </div>
+
+    <div class="condensed content-link">
+      <div class="columns small-10">
+        <h3>Do We Know What We Have?</h3>
+        <h4>Carole M. Stephens</h4>
+      </div>
+      <div class="unchecked columns small-2">
+        <i class="fa fa-check fa-4x"></i>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
