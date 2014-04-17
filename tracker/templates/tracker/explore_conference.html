@@ -1,6 +1,14 @@
 {% extends "tracker/base.html" %}
+{% load static %}
 
 {% block title %} General Conference - Sort by {{ sort_by }} {% endblock %}
+
+{% block scripts %}
+<script src="{% static "libs/giraph/DataSet.js" %}"></script>
+<script src="{% static "libs/giraph/Graph.js" %}"></script>
+<script src="{% static "libs/giraph/Point.js" %}"></script>
+<script src="{% static "scripts/drawgraphs.js" %}"></script>
+{% endblock %}
 
 {% block sub_navigation %}
 <div id="sub-navigation" class="row">
@@ -22,10 +30,14 @@
 <a href="/general-conference/{{ sort_by }}s/{{ category }}/">
   <div class="columns small-12 large-6 end">  
     <div class="content-link">
-      <div class="columns small-12">
+      <div class="columns small-8">
           <h3>{{ category }}</h3></a>
       </div>
-      <span class="progress-tracker"></span>
+      <div class="completion-ratio columns small-4">
+        <span>{{ category.num_completed }}/{{ category.num_total }}</span>
+        <canvas width="50" height="50"></canvas>
+      </div>
+      
     </div>
   </div>
 </a>

@@ -25,12 +25,27 @@ def home(request):
 def conference_sessions(request):
 	sessions = Folder.objects.filter(parentFolder__name='General Conference')
 
+	if request.user.is_authenticated():
+		user = User.objects.get(pk=request.user.id)
+		for session in sessions:
+			talks_in_session = ConferenceTalk.objects.filter(folder__parentFolder__name=session)
+			session.num_total = len(talks_in_session)
+			session.num_completed = len(Completion.objects.filter(user=user, content__in=talks_in_session))
+
 	context = {'categories': sessions, "sort_by": "session"}
 	return render(request, 'tracker/explore_conference.html', context)
 
 
 def conference_speakers(request):
 	speakers = Author.objects.all()
+
+	if request.user.is_authenticated():
+		user = User.objects.get(pk=request.user.id)
+		for speaker in speakers:
+			talks_by_speaker = ConferenceTalk.objects.filter(author__name=speaker)
+			speaker.num_total = len(talks_by_speaker)
+			speaker.num_completed = len(Completion.objects.filter(user=user, content__in=talks_by_speaker))
+
 
 	context = {'categories': speakers, "sort_by": "speaker"}
 	return render(request, 'tracker/explore_conference.html', context)
@@ -45,7 +60,18 @@ def conference_topics(request):
 def conference_talks_by_session(request, session):
 	talks = ConferenceTalk.objects.filter(folder__parentFolder__name=session)
 
-	context = {'talks': talks, 'folder': session}
+
+	if request.user.is_authenticated():
+		user = User.objects.get(pk=request.user.id)
+		pk = user.pk
+		completed_items = Completion.objects.filter(user__pk=pk)
+		pks = [item.content.pk for item in completed_items]
+	else:
+		pks = []
+		user = User()
+
+
+	context = {'talks': talks, 'folder': session, 'pks': pks, 'user': user}
 	return render(request, 'tracker/choose_talk.html', context)
 
 def conference_talks_by_speaker(request, speaker):
