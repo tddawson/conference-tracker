@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
+import re
 
 
 class Author(models.Model):
@@ -66,6 +67,12 @@ class ConferenceTalk(ContentItem):
 
     def __unicode__(self):
         return self.title
+
+    def simpleTitle(self):
+        simpleTitle = re.sub('[\s]', '-', self.title)
+        simpleTitle = re.sub('[^\w-]', '', simpleTitle)
+        print self.title
+        return simpleTitle
 
     def smallLinks(self):
         return self.link_set.filter(~Q(format__container='YouTube'))
