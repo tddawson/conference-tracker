@@ -27,21 +27,9 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 # Information about our Facebook App (used to connect)
-FACEBOOK_APP_ID = "1402054483400570"
-FACEBOOK_SECRET_KEY = "4ca2633e0529f80e76e72cf44ba3bb08"
 
-# Optionally set default permissions to request, e.g: ['email', 'user_about_me']
-FACEBOOK_SCOPE = []
-
-# And for local debugging, use one of the debug middlewares and set:
-FACEBOOK_DEBUG_TOKEN = ''
-FACEBOOK_DEBUG_UID = ''
-FACEBOOK_DEBUG_COOKIE = ''
-FACEBOOK_DEBUG_SIGNEDREQ = ''
-
-# Optionally throw exceptions instead of returning HTTP errors on signed request issues
-FACEBOOK_RAISE_SR_EXCEPTIONS = True
-
+SOCIAL_AUTH_FACEBOOK_KEY = "1402054483400570"
+SOCIAL_AUTH_FACEBOOK_SECRET = "4ca2633e0529f80e76e72cf44ba3bb08"
 
 # Application definition
 INSTALLED_APPS = (
@@ -52,16 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'tracker',
-    'django_facebook'
-)
-'''
-MIDDLEWARE_CLASSES = (
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social.apps.django_app.default'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -73,14 +52,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
-    'django_facebook.context_processors.facebook',
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
 )
 
 AUTHENTICATION_BACKENDS = (
-    'django_facebook.auth_backends.FacebookBackend',
-    'django.contrib.auth.backends.ModelBackend',
+        'social.backends.facebook.FacebookOAuth2',
+        'django.contrib.auth.backends.ModelBackend',
 )
-'''
 
 
 ROOT_URLCONF = 'app.urls'
@@ -114,5 +93,4 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-
 STATIC_URL = '/static/'

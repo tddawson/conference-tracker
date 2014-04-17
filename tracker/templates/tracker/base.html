@@ -28,7 +28,7 @@
     {% if request.user.is_authenticated %}
       <a href="/logout/" class="attention-link">Logout</a>
     {% else %}
-      <a href="/login/facebook/" class="attention-link">Login</a>
+      <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"  class="attention-link">Login</a>
     {% endif %}
   </div>
 </div>
