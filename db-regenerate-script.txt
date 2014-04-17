@@ -16,6 +16,7 @@ ANOTHER NOTE: If you've updated the models, be sure to update the CREATE TABLE s
 BEGIN;
 DROP TABLE "main"."tracker_author";
 DROP TABLE "main"."tracker_completion";
+DROP TABLE "main"."tracker_conference";
 DROP TABLE "main"."tracker_conferencetalk";
 DROP TABLE "main"."tracker_contentformat";
 DROP TABLE "main"."tracker_contentitem";
