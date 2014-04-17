@@ -16,6 +16,9 @@ class Importer:
         self.namePrefixes = ["president", "elder", "sister", "brother", "bishop"]
 
     def run(self):
+        self.importGeneralConference()
+
+    def importGeneralConference(self):
         logging.info("Importing General Conference")
 
         conferenceListEndpoint = 'https://tech.lds.org/mc/api/conference/list'
