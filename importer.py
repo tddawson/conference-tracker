@@ -67,73 +67,76 @@ class Importer:
         Talks = talkList['Talks']
 
         for talk in Talks:
+            self.importTalk(talk, SessionFolder)
+
+    def importTalk(self, talk, sessionFolder):
+        try:
+            authorName = talk['Persons'][0]['Name']
+            names = authorName.split(' ', 1)
+
+            for prefix in self.namePrefixes:
+
+                if prefix in names[0].lower():
+
+                    authorName = names[1]
+
             try:
-                authorName = talk['Persons'][0]['Name']
-                names = authorName.split(' ', 1)
+                a = Author.objects.get(name=authorName)
+            except:
 
-                for prefix in self.namePrefixes:
+                skipAuthor = False
+                for auth in self.authorsToSkip:
 
-                    if prefix in names[0].lower():
+                    if auth in authorName.lower():
+                        skipAuthor = True
+                        break
 
-                        authorName = names[1]
+                if skipAuthor == True:
+                    return
+                else:
+                    a = Author(name = authorName)
+                    a.save()
 
+
+            confTalk = ConferenceTalk(title = talk['Title'],
+                                     folder = sessionFolder,
+                                     author = a)
+
+            confTalk.save()
+
+            for media in talk['Media']:
                 try:
-                    a = Author.objects.get(name=authorName)
+                    contentFormat = ContentFormat.objects.get(container = media['MediaContainer'])
                 except:
-
-                    skipAuthor = False
-                    for auth in self.authorsToSkip:
-
-                        if auth in authorName.lower():
-                            skipAuthor = True
-                            break
-
-                    if skipAuthor == True:
-                        continue
-                    else:
-                        a = Author(name = authorName)
-                        a.save()
-
-
-                confTalk = ConferenceTalk(title = talk['Title'],
-                                         folder = SessionFolder,
-                                         author = a)
-
-                confTalk.save()
-
-                for media in talk['Media']:
-                    try:
-                        contentFormat = ContentFormat.objects.get(container = media['MediaContainer'])
-                    except:
-                        contentFormat = ContentFormat(  type = media['MediaType'],
-                                                        container = media['MediaContainer'])
-                        contentFormat.save()
-
-                    l = Link(format = contentFormat,
-                             URI = media['URL'],
-                             contentItem = confTalk)
-                    l.save()
-                '''
-                #Generate LDS.org url
-                try:
-                    contentFormat = ContentFormat.objects.get(container = 'LDS.org')
-                except:
-                    contentFormat = ContentFormat(  type = 'Text',
-                                                    container = 'LDS.org')
+                    contentFormat = ContentFormat(  type = media['MediaType'],
+                                                    container = media['MediaContainer'])
                     contentFormat.save()
 
-                conf = talkList['Conference']
-                year = conf['Year']
-                month = '{num:02d}'.format(num = conf['Month'])
-                scrubbedName = talk['Title']
-                uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, format(month, '02d'), scrubbedName)
                 l = Link(format = contentFormat,
-                         URI = uri,
+                         URI = media['URL'],
                          contentItem = confTalk)
                 l.save()
-                '''
+            '''
+            #Generate LDS.org url
+            try:
+                contentFormat = ContentFormat.objects.get(container = 'LDS.org')
             except:
-                continue
+                contentFormat = ContentFormat(  type = 'Text',
+                                                container = 'LDS.org')
+                contentFormat.save()
+
+            conf = talkList['Conference']
+            year = conf['Year']
+            month = '{num:02d}'.format(num = conf['Month'])
+            scrubbedName = talk['Title']
+            uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, format(month, '02d'), scrubbedName)
+            l = Link(format = contentFormat,
+                     URI = uri,
+                     contentItem = confTalk)
+            l.save()
+            '''
+        except:
+            return
 
     def getResponseJson(self, request):
         response = urllib2.urlopen(request).read()
