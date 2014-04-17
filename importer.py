@@ -152,8 +152,8 @@ class Importer:
             contentFormat.save()
 
 
-        year = conference['Year']
-        month = '{num:02d}'.format(num = conference['Month'])
+        year = talk.folder.parentFolder.year
+        month = '{num:02d}'.format(num = talk.folder.parentFolder.month)
         scrubbedName = talk['Title']
         uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, format(month, '02d'), scrubbedName)
         l = Link(format = contentFormat,
