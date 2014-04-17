@@ -12,7 +12,11 @@ from django.contrib.auth import logout as auth_logout
 def home(request):
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
-		context = {"user":user}
+		# Get 5 most recently completed items
+		completed_items = Completion.objects.filter(user__pk=user.pk).order_by('pk').reverse()[:5]
+
+		context = {"user":user, "completed_items":completed_items}
+
 		return render(request, 'tracker/home_logged_in.html', context)
 	else:
 		return render(request, 'tracker/home.html', {})

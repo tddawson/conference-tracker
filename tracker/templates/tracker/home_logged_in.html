@@ -17,15 +17,14 @@
     </div>
     <div>
       <h2>Recently Completed</h2>
+      {% for completed in completed_items %}
       <div class="condensed content-link">
-        <div class="columns small-10">
-          <h3>Do We Know What We Have?</h3>
-          <h4>Carole M. Stephens</h4>
-        </div>
-        <div class="checked columns small-2">
-          <i class="fa fa-check fa-4x"></i>
+        <div class="columns small-12">
+          <h3>{{ completed.content.conferencetalk.title }}</h3>
+          <h4>{{ completed.content.conferencetalk.author }}</h4>
         </div>
       </div>
+      {% endfor %}
     </div>
   </div>
   <div class="small-12 large-6 columns">
