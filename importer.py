@@ -12,7 +12,7 @@ class Importer:
 
     def __init__(self):
         logging.basicConfig(filename='importer.log', level=logging.INFO)
-        self.authorsToSkip = ["presented by", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
+        self.authorsToSkip = ["presented by", "church of", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
         self.namePrefixes = ["president", "elder", "sister", "brother", "bishop"]
 
     def run(self):
