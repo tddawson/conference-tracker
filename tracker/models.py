@@ -57,6 +57,10 @@ class Link(models.Model):
 
         return action
 
+class Conference(Folder):
+    year = models.IntegerField()
+    month = models.IntegerField()
+
 class ConferenceTalk(ContentItem):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author)
