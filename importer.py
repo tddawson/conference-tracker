@@ -118,7 +118,7 @@ class Importer:
 
             for link in talk['Media']:
                 self.importLink(link, confTalk)
-
+            
             self.generateTextUrl(confTalk)
 
         except:
@@ -143,24 +143,20 @@ class Importer:
         l.save()
 
     def generateTextUrl(self, talk):
-        '''
         try:
             contentFormat = ContentFormat.objects.get(container = 'LDS.org')
         except:
             contentFormat = ContentFormat(  type = 'Text',
                                             container = 'LDS.org')
             contentFormat.save()
-
-
+        
         year = talk.folder.parentFolder.year
         month = '{num:02d}'.format(num = talk.folder.parentFolder.month)
-        scrubbedName = talk['Title']
-        uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, format(month, '02d'), scrubbedName)
+        uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, month, talk.simpleTitle())
         l = Link(format = contentFormat,
                  URI = uri,
                  contentItem = talk)
         l.save()
-        '''
 
     def getResponseJson(self, request):
         response = urllib2.urlopen(request).read()
