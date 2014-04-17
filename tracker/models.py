@@ -68,7 +68,7 @@ class ConferenceTalk(ContentItem):
 
     def youTubeEmbedLink(self):
         link = self.link_set.filter(format__container='YouTube').first().URI
-        uniqueId = link[31:]
+        uniqueId = link.split("=")[1]
         embedLink = '//www.youtube.com/embed/' + uniqueId
         return embedLink
 
