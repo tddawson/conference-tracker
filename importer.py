@@ -37,13 +37,19 @@ class Importer:
             self.importConference(conference, GeneralConferenceFolder)
 
     def importConference(self, conference, generalConferenceFolder):
-        logging.info(conference['Title'])
+        conferenceTitle = conference['Title']
+        year = conference['Year']
+        month = conference['Month']
+        logging.info('-------------------------------------------------')
+        logging.info(conferenceTitle)
+
         try:
-            generalConferenceFolder = Folder.objects.get(name= conference['Title'])
+            generalConferenceFolder = Folder.objects.get(name = conferenceTitle)
             logging.info("Session Already Imported")
             return
         except:
-            individualConferenceFolder = Folder(name = conference['Title'], parentFolder = generalConferenceFolder)
+            individualConferenceFolder = Conference(name = conferenceTitle, parentFolder = generalConferenceFolder,
+                                                    year = year, month = month)
             individualConferenceFolder.save()
 
         sessionListEndpoint = 'http://tech.lds.org/mc/api/conference/sessionlist'
@@ -56,7 +62,10 @@ class Importer:
             self.importSession(session, individualConferenceFolder)
 
     def importSession(self, session, conferenceFolder):
-        SessionFolder = Folder(name = session['Title'], parentFolder = conferenceFolder)
+        sessionTitle = session['Title']
+        logging.info(sessionTitle)
+
+        SessionFolder = Folder(name = sessionTitle, parentFolder = conferenceFolder)
 
         SessionFolder.save()
 
@@ -71,8 +80,11 @@ class Importer:
 
     def importTalk(self, talk, sessionFolder):
         try:
+            talkTitle = talk['Title']
             authorName = talk['Persons'][0]['Name']
             names = authorName.split(' ', 1)
+
+            logging.info( '{} - {}'.format(authorName, talkTitle) )
 
             for prefix in self.namePrefixes:
 
@@ -98,7 +110,7 @@ class Importer:
                     a.save()
 
 
-            confTalk = ConferenceTalk(title = talk['Title'],
+            confTalk = ConferenceTalk(title = talkTitle,
                                      folder = sessionFolder,
                                      author = a)
 
@@ -107,40 +119,48 @@ class Importer:
             for link in talk['Media']:
                 self.importLink(link, confTalk)
 
-            '''
-            #Generate LDS.org url
-            try:
-                contentFormat = ContentFormat.objects.get(container = 'LDS.org')
-            except:
-                contentFormat = ContentFormat(  type = 'Text',
-                                                container = 'LDS.org')
-                contentFormat.save()
+            self.generateTextUrl(confTalk)
 
-            conf = talkList['Conference']
-            year = conf['Year']
-            month = '{num:02d}'.format(num = conf['Month'])
-            scrubbedName = talk['Title']
-            uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, format(month, '02d'), scrubbedName)
-            l = Link(format = contentFormat,
-                     URI = uri,
-                     contentItem = confTalk)
-            l.save()
-            '''
         except:
             return
 
     def importLink(self, link, confTalk):
+        container = link['MediaContainer']
+        type = link['MediaType']
+        url = link['URL']
+        logging.debug('LINK: {}:{}:{}'.format(container, type, url))
+
         try:
-            contentFormat = ContentFormat.objects.get(container = link['MediaContainer'])
+            contentFormat = ContentFormat.objects.get(container = container)
         except:
-            contentFormat = ContentFormat(  type = link['MediaType'],
-                                            container = link['MediaContainer'])
+            contentFormat = ContentFormat(  type = type,
+                                            container = container)
             contentFormat.save()
 
         l = Link(format = contentFormat,
-                 URI = link['URL'],
+                 URI = url,
                  contentItem = confTalk)
         l.save()
+
+    def generateTextUrl(self, talk):
+        '''
+        try:
+            contentFormat = ContentFormat.objects.get(container = 'LDS.org')
+        except:
+            contentFormat = ContentFormat(  type = 'Text',
+                                            container = 'LDS.org')
+            contentFormat.save()
+
+
+        year = conference['Year']
+        month = '{num:02d}'.format(num = conference['Month'])
+        scrubbedName = talk['Title']
+        uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, format(month, '02d'), scrubbedName)
+        l = Link(format = contentFormat,
+                 URI = uri,
+                 contentItem = talk)
+        l.save()
+        '''
 
     def getResponseJson(self, request):
         response = urllib2.urlopen(request).read()
