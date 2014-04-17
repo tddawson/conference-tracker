@@ -104,18 +104,9 @@ class Importer:
 
             confTalk.save()
 
-            for media in talk['Media']:
-                try:
-                    contentFormat = ContentFormat.objects.get(container = media['MediaContainer'])
-                except:
-                    contentFormat = ContentFormat(  type = media['MediaType'],
-                                                    container = media['MediaContainer'])
-                    contentFormat.save()
+            for link in talk['Media']:
+                self.importLink(link, confTalk)
 
-                l = Link(format = contentFormat,
-                         URI = media['URL'],
-                         contentItem = confTalk)
-                l.save()
             '''
             #Generate LDS.org url
             try:
@@ -137,6 +128,19 @@ class Importer:
             '''
         except:
             return
+
+    def importLink(self, link, confTalk):
+        try:
+            contentFormat = ContentFormat.objects.get(container = link['MediaContainer'])
+        except:
+            contentFormat = ContentFormat(  type = link['MediaType'],
+                                            container = link['MediaContainer'])
+            contentFormat.save()
+
+        l = Link(format = contentFormat,
+                 URI = link['URL'],
+                 contentItem = confTalk)
+        l.save()
 
     def getResponseJson(self, request):
         response = urllib2.urlopen(request).read()
