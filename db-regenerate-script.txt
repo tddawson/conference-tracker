@@ -1,0 +1,90 @@
+/*
+Conference Tracker database regeneration script
+By CJ Campbell
+April 16, 2014
+
+To wipe the sqlite models from the database and regenerate them:
+1) ssh into the client
+2) navigate to the folder containing the sqlite database
+3) type sqlite3 <sqlite-file-name>
+4) paste the code below
+
+NOTE: This will wipe only the models. All other tables will be left alone.
+ANOTHER NOTE: If you've updated the models, be sure to update the CREATE TABLE schema for that model below before running this
+*/
+
+BEGIN;
+DROP TABLE "main"."tracker_author";
+DROP TABLE "main"."tracker_completion";
+DROP TABLE "main"."tracker_conference";
+DROP TABLE "main"."tracker_conferencetalk";
+DROP TABLE "main"."tracker_contentformat";
+DROP TABLE "main"."tracker_contentitem";
+DROP TABLE "main"."tracker_contentitem_tags";
+DROP TABLE "main"."tracker_folder";
+DROP TABLE "main"."tracker_link";
+DROP TABLE "main"."tracker_tag";
+
+CREATE TABLE "tracker_author" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(200) NOT NULL
+)
+;
+CREATE TABLE "tracker_tag" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(200) NOT NULL
+)
+;
+CREATE TABLE "tracker_folder" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "name" varchar(200) NOT NULL,
+    "parentFolder_id" integer REFERENCES "tracker_folder" ("id")
+)
+;
+CREATE TABLE "tracker_contentitem_tags" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "contentitem_id" integer NOT NULL,
+    "tag_id" integer NOT NULL REFERENCES "tracker_tag" ("id"),
+    UNIQUE ("contentitem_id", "tag_id")
+)
+;
+CREATE TABLE "tracker_contentitem" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "folder_id" integer NOT NULL REFERENCES "tracker_folder" ("id")
+)
+;
+CREATE TABLE "tracker_contentformat" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "type" varchar(10) NOT NULL,
+    "container" varchar(10) NOT NULL
+)
+;
+CREATE TABLE "tracker_link" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "format_id" integer NOT NULL REFERENCES "tracker_contentformat" ("id"),
+    "URI" varchar(200) NOT NULL,
+    "contentItem_id" integer NOT NULL REFERENCES "tracker_contentitem" ("id")
+)
+;
+CREATE TABLE "tracker_conference" (
+    "folder_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "tracker_folder" ("id"),
+    "year" integer NOT NULL,
+    "month" integer NOT NULL
+)
+;
+CREATE TABLE "tracker_conferencetalk" (
+    "contentitem_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "tracker_contentitem" ("id"),
+    "title" varchar(200) NOT NULL,
+    "author_id" integer NOT NULL REFERENCES "tracker_author" ("id")
+)
+;
+CREATE TABLE "tracker_completion" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "user_id" integer NOT NULL REFERENCES "auth_user" ("id"),
+    "dateCompleted" datetime NOT NULL,
+    "content_id" integer NOT NULL UNIQUE REFERENCES "tracker_contentitem" ("id")
+)
+;
+
+COMMIT;
+

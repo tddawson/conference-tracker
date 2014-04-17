@@ -1,103 +1,170 @@
 #Set up the Django enviornment and import the data models
 import urllib2
 import json
-import shutil
+import logging
 
 import sys, os
 sys.path.append('app/')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
-from django.conf import settings
-
-authorsToSkip = ["presented by", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
-namePrefixes = ["presiden", "elder", "sister", "brother", "bishop"]
 from tracker.models import *
 
-req = urllib2.Request(url='https://tech.lds.org/mc/api/conference/list',
-						data='LanguageID=1')
+class Importer:
+
+    def __init__(self):
+        logging.basicConfig(filename='importer.log', level=logging.INFO)
+        self.authorsToSkip = ["presented by", "church of", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
+        self.namePrefixes = ["president", "elder", "sister", "brother", "bishop"]
+
+    def run(self):
+        self.importGeneralConference()
+
+    def importGeneralConference(self):
+        logging.info("Importing General Conference")
+
+        conferenceListEndpoint = 'https://tech.lds.org/mc/api/conference/list'
+        logging.debug("Requesting {}".format(conferenceListEndpoint))
+        req = urllib2.Request(url=conferenceListEndpoint, data='LanguageID=1')
+        conferenceList = self.getResponseJson(req)
+
+        Conferences = conferenceList['Conferences']
+        try:
+            GeneralConferenceFolder = Folder.objects.get(name = "General Conference")
+        except:
+            GeneralConferenceFolder = Folder(name = "General Conference")
+            GeneralConferenceFolder.save()
+
+        for conference in Conferences:
+            self.importConference(conference, GeneralConferenceFolder)
+
+    def importConference(self, conference, generalConferenceFolder):
+        conferenceTitle = conference['Title']
+        year = conference['Year']
+        month = conference['Month']
+        logging.info('-------------------------------------------------')
+        logging.info(conferenceTitle)
+
+        try:
+            generalConferenceFolder = Folder.objects.get(name = conferenceTitle)
+            logging.info("Session Already Imported")
+            return
+        except:
+            individualConferenceFolder = Conference(name = conferenceTitle, parentFolder = generalConferenceFolder,
+                                                    year = year, month = month)
+            individualConferenceFolder.save()
+
+        sessionListEndpoint = 'http://tech.lds.org/mc/api/conference/sessionlist'
+        req = urllib2.Request(url = sessionListEndpoint,
+                                data = 'ConferenceID='+str(conference['ID']))
+
+        Sessions = self.getResponseJson(req)['Sessions']
+
+        for session in Sessions:
+            self.importSession(session, individualConferenceFolder)
+
+    def importSession(self, session, conferenceFolder):
+        sessionTitle = session['Title']
+        logging.info(sessionTitle)
+
+        SessionFolder = Folder(name = sessionTitle, parentFolder = conferenceFolder)
+
+        SessionFolder.save()
+
+        req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/talklist',
+                                data = 'SessionID='+str(session['ID']))
+
+        talkList = self.getResponseJson(req)
+        Talks = talkList['Talks']
+
+        for talk in Talks:
+            self.importTalk(talk, SessionFolder)
+
+    def importTalk(self, talk, sessionFolder):
+        try:
+            talkTitle = talk['Title']
+            authorName = talk['Persons'][0]['Name']
+            names = authorName.split(' ', 1)
+
+            logging.info( '{} - {}'.format(authorName, talkTitle) )
+
+            for prefix in self.namePrefixes:
+
+                if prefix in names[0].lower():
+
+                    authorName = names[1]
+
+            try:
+                a = Author.objects.get(name=authorName)
+            except:
+
+                skipAuthor = False
+                for auth in self.authorsToSkip:
+
+                    if auth in authorName.lower():
+                        skipAuthor = True
+                        break
+
+                if skipAuthor == True:
+                    return
+                else:
+                    a = Author(name = authorName)
+                    a.save()
 
 
+            confTalk = ConferenceTalk(title = talkTitle,
+                                     folder = sessionFolder,
+                                     author = a)
 
-Conferences = json.loads(urllib2.urlopen(req).read())['Conferences']
-try:
-	GeneralConferenceFolder = Folder.objects.get(name = "General Conference")
-except:
-	GeneralConferenceFolder = Folder(name = "General Conference")
-	GeneralConferenceFolder.save()
+            confTalk.save()
 
+            for link in talk['Media']:
+                self.importLink(link, confTalk)
+            
+            self.generateTextUrl(confTalk)
 
-for conference in Conferences:
-	print conference['Title']
-	try:
-		ConferenceFolder = Folder.objects.get(name= conference['Title'])
-		print "Session Already Imported"
-		continue
-	except:
-		ConferenceFolder = Folder(name = conference['Title'], parentFolder = GeneralConferenceFolder)
-		ConferenceFolder.save()
+        except:
+            return
 
-	req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/sessionlist',
-							data = 'ConferenceID='+str(conference['ID']))
+    def importLink(self, link, confTalk):
+        container = link['MediaContainer']
+        type = link['MediaType']
+        url = link['URL']
+        logging.debug('LINK: {}:{}:{}'.format(container, type, url))
 
-	Sessions = json.loads(urllib2.urlopen(req).read())['Sessions']
+        try:
+            contentFormat = ContentFormat.objects.get(container = container)
+        except:
+            contentFormat = ContentFormat(  type = type,
+                                            container = container)
+            contentFormat.save()
 
-	for session in Sessions:
+        l = Link(format = contentFormat,
+                 URI = url,
+                 contentItem = confTalk)
+        l.save()
 
-		SessionFolder = Folder(name = session['Title'], parentFolder = ConferenceFolder)
+    def generateTextUrl(self, talk):
+        try:
+            contentFormat = ContentFormat.objects.get(container = 'LDS.org')
+        except:
+            contentFormat = ContentFormat(  type = 'Text',
+                                            container = 'LDS.org')
+            contentFormat.save()
+        
+        year = talk.folder.parentFolder.year
+        month = '{num:02d}'.format(num = talk.folder.parentFolder.month)
+        uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, month, talk.simpleTitle())
+        l = Link(format = contentFormat,
+                 URI = uri,
+                 contentItem = talk)
+        l.save()
 
-		SessionFolder.save()
+    def getResponseJson(self, request):
+        response = urllib2.urlopen(request).read()
+        return json.loads(response)
 
-		req = urllib2.Request(url = 'http://tech.lds.org/mc/api/conference/talklist',
-								data = 'SessionID='+str(session['ID']))
-
-		Talks = json.loads(urllib2.urlopen(req).read())['Talks']
-
-		for talk in Talks:
-			try:
-				authorName = talk['Persons'][0]['Name']
-				names = authorName.split(' ', 1)
-
-				for prefix in namePrefixes:
-				
-					if prefix in names[0].lower():
-
-						authorName = names[1]
-
-				try:
-					a = Author.objects.get(name=authorName)
-				except:
-
-					skipAuthor = False
-					for auth in authorsToSkip:
-						
-						if auth in authorName.lower():
-							skipAuthor = True
-							break
-
-					if skipAuthor == True:
-						continue
-					else:
-						a = Author(name = authorName)
-						a.save()
-
-
-				confTalk = ConferenceTalk(title = talk['Title'],
-										 folder = SessionFolder, 
-										 author = a)
-
-				confTalk.save()
-
-				for media in talk['Media']:
-					try:
-						contentFormat = ContentFormat.objects.get(container = media['MediaContainer'])
-					except:
-						contentFormat = ContentFormat(  type = media['MediaType'],
-														container = media['MediaContainer'])
-						contentFormat.save()
-
-					l = Link(format = contentFormat,
-							 URI = media['URL'],
-							 contentItem = confTalk)
-					l.save()
-
-			except:
-				continue
+if __name__ == "__main__":
+    importer = Importer()
+    try:
+        importer.run()
+    except KeyboardInterrupt:
+        pass

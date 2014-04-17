@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q
+import re
 
 
 class Author(models.Model):
@@ -56,12 +57,21 @@ class Link(models.Model):
 
         return action
 
+class Conference(Folder):
+    year = models.IntegerField()
+    month = models.IntegerField()
+
 class ConferenceTalk(ContentItem):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(Author)
 
     def __unicode__(self):
         return self.title
+
+    def simpleTitle(self):
+        simpleTitle = re.sub('[\s]', '-', self.title)
+        simpleTitle = re.sub('[^\w-]', '', simpleTitle)
+        return simpleTitle
 
     def smallLinks(self):
         return self.link_set.filter(~Q(format__container='YouTube'))
