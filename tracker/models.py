@@ -71,7 +71,6 @@ class ConferenceTalk(ContentItem):
     def simpleTitle(self):
         simpleTitle = re.sub('[\s]', '-', self.title)
         simpleTitle = re.sub('[^\w-]', '', simpleTitle)
-        print self.title
         return simpleTitle
 
     def smallLinks(self):
