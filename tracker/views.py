@@ -152,4 +152,4 @@ def profile(request):
 def logout(request):
 	"""Logs out user"""
 	auth_logout(request)
-	return render_to_response('tracker/home.html', {}, RequestContext(request))
+	return render_to_response('tracker/home.html', {"most_popular":mostPopularItems()}, RequestContext(request))
