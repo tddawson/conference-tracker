@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models import Count
 from django.db.models import Q
 import re
 
@@ -87,3 +88,13 @@ class Completion(models.Model):
     user = models.ForeignKey(User)
     dateCompleted = models.DateTimeField('Date Completed')
     content = models.OneToOneField(ContentItem)
+
+
+def mostPopularItems():
+    ids = Completion.objects.values('content').annotate(c=Count('content')).order_by('-c')[:5]
+    talks = []
+    for id in ids:
+        talks.append(ConferenceTalk.objects.get(pk=id['content']))
+    return talks
+ 
+

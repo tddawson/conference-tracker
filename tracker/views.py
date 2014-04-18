@@ -10,16 +10,19 @@ from django.shortcuts import render_to_response, redirect
 from django.contrib.auth import logout as auth_logout
 
 def home(request):
+	talks = mostPopularItems()
+	
+
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
 		# Get 5 most recently completed items
 		completed_items = Completion.objects.filter(user__pk=user.pk).order_by('pk').reverse()[:5]
 
-		context = {"user":user, "completed_items":completed_items}
+		context = {"user":user, "completed_items":completed_items, "most_popular":talks}
 
 		return render(request, 'tracker/home_logged_in.html', context)
 	else:
-		return render(request, 'tracker/home.html', {})
+		return render(request, 'tracker/home.html', {"most_popular":talks})
 
 
 def conference_sessions(request):
@@ -150,4 +153,3 @@ def logout(request):
 	"""Logs out user"""
 	auth_logout(request)
 	return render_to_response('tracker/home.html', {}, RequestContext(request))
-
