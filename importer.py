@@ -41,7 +41,7 @@ class Importer:
             self.importConference(conference, GeneralConferenceFolder)
 
     def importConference(self, conference, generalConferenceFolder):
-        conferenceTitle = conference['Title']
+        conferenceTitle = conference['Title'].split(',')[0]
         year = conference['Year']
         month = conference['Month']
         logging.info('-------------------------------------------------')
