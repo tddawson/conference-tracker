@@ -40,6 +40,8 @@ class Importer:
         for conference in Conferences:
             self.importConference(conference, GeneralConferenceFolder)
 
+        logging.info("General Conference import complete!")
+
     def importConference(self, conference, generalConferenceFolder):
         conferenceTitle = conference['Title'].split(',')[0]
         year = conference['Year']
