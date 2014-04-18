@@ -63,12 +63,13 @@ class Conference(Folder):
 
 class ConferenceTalk(ContentItem):
     title = models.CharField(max_length=200)
+    simpleTitle = models.CharField(max_length=200)
     author = models.ForeignKey(Author)
 
     def __unicode__(self):
         return self.title
 
-    def simpleTitle(self):
+    def getSimpleTitle(self):
         simpleTitle = re.sub('[\s]', '-', self.title)
         simpleTitle = re.sub('[^\w-]', '', simpleTitle)
         return simpleTitle

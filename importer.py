@@ -121,8 +121,9 @@ class Importer:
                     a.save()
 
             confTalk = ConferenceTalk(title = talkTitle,
-                                     folder = sessionFolder,
-                                     author = a)
+                                      folder = sessionFolder,
+                                      author = a)
+            confTalk.simpleTitle = confTalk.getSimpleTitle()
 
             confTalk.save()
 

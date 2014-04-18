@@ -19,7 +19,7 @@
     <div>
       <h2>Recently Completed</h2>
       {% for completed in completed_items %}
-      <a href="/general-conference/talks/{{completed.content.conferencetalk.title}}">
+      <a href="/general-conference/talks/{{completed.content.conferencetalk.simpleTitle}}">
         <div class="condensed content-link">
           <div class="columns small-12">
             <h3>{{ completed.content.conferencetalk.title }}</h3>

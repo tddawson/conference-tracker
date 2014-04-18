@@ -99,7 +99,7 @@ def conference_talks_by_topic(request, topic):
 
 
 def conference_talk(request, talk):
-	talk = ConferenceTalk.objects.filter(title=talk)[0]
+	talk = ConferenceTalk.objects.filter(simpleTitle=talk)[0]
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
 		completed = len(Completion.objects.filter(user=user, content=talk)) == 1
