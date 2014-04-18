@@ -75,6 +75,7 @@ CREATE TABLE "tracker_conference" (
 CREATE TABLE "tracker_conferencetalk" (
     "contentitem_ptr_id" integer NOT NULL PRIMARY KEY REFERENCES "tracker_contentitem" ("id"),
     "title" varchar(200) NOT NULL,
+    "simpleTitle" varchar(200) NOT NULL,
     "author_id" integer NOT NULL REFERENCES "tracker_author" ("id")
 )
 ;
