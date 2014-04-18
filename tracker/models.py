@@ -19,10 +19,16 @@ class Tag(models.Model):
 
 class Folder(models.Model):
     name = models.CharField(max_length=200)
+    simpleName = models.CharField(max_length=200)
     parentFolder = models.ForeignKey('Folder', null=True, blank=True)
 
     def __unicode__(self):
         return self.name
+
+    def getSimpleName(self):
+        simpleName = re.sub('[\s]', '-', self.name)
+        simpleName = re.sub('[^\w-]', '', simpleName)
+        return simpleName
 
 class ContentItem(models.Model):
     #title = models.CharField(max_length = 200)

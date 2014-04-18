@@ -23,6 +23,7 @@ class Importer:
         self.importGeneralConference()
 
     def importGeneralConference(self):
+        logging.info('-------------------------------------------------')
         logging.info("Importing General Conference")
 
         conferenceListEndpoint = 'https://tech.lds.org/mc/api/conference/list'
@@ -56,6 +57,7 @@ class Importer:
         except:
             individualConferenceFolder = Conference(name = conferenceTitle, parentFolder = generalConferenceFolder,
                                                     year = year, month = month)
+            individualConferenceFolder.simpleName = individualConferenceFolder.getSimpleName()
             individualConferenceFolder.save()
 
         sessionListEndpoint = 'http://tech.lds.org/mc/api/conference/sessionlist'

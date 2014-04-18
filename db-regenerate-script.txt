@@ -38,6 +38,7 @@ CREATE TABLE "tracker_tag" (
 CREATE TABLE "tracker_folder" (
     "id" integer NOT NULL PRIMARY KEY,
     "name" varchar(200) NOT NULL,
+    "simpleName" varchar(200) NOT NULL,
     "parentFolder_id" integer REFERENCES "tracker_folder" ("id")
 )
 ;
