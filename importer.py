@@ -2,6 +2,7 @@
 import urllib2
 import json
 import logging
+import sys
 
 import sys, os
 sys.path.append('app/')
@@ -12,8 +13,11 @@ class Importer:
 
     def __init__(self):
         logging.basicConfig(filename='importer.log', level=logging.INFO)
-        self.authorsToSkip = ["presented by", "church of", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
+        self.authorsToSkip = ["presented by", "afternoon", "morning", "choir", "priesthood", "congregation", "meeting"]
         self.namePrefixes = ["president", "elder", "sister", "brother", "bishop"]
+
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
 
     def run(self):
         self.importGeneralConference()
@@ -81,7 +85,13 @@ class Importer:
     def importTalk(self, talk, sessionFolder):
         try:
             talkTitle = talk['Title']
-            authorName = talk['Persons'][0]['Name']
+            persons = talk['Persons']
+
+            if len(persons) == 0:
+                logging.info("Skipping '{}'".format(talkTitle))
+                return
+
+            authorName = persons[0]['Name']
             names = authorName.split(' ', 1)
 
             logging.info( '{} - {}'.format(authorName, talkTitle) )
@@ -104,11 +114,11 @@ class Importer:
                         break
 
                 if skipAuthor == True:
+                    logging.info("Skipping '{}'".format(talkTitle))
                     return
                 else:
                     a = Author(name = authorName)
                     a.save()
-
 
             confTalk = ConferenceTalk(title = talkTitle,
                                      folder = sessionFolder,
@@ -121,8 +131,8 @@ class Importer:
             
             self.generateTextUrl(confTalk)
 
-        except:
-            return
+        except Exception as e:
+            logging.error(e)
 
     def importLink(self, link, confTalk):
         container = link['MediaContainer']
@@ -149,10 +159,10 @@ class Importer:
             contentFormat = ContentFormat(  type = 'Text',
                                             container = 'LDS.org')
             contentFormat.save()
-        
+
         year = talk.folder.parentFolder.year
         month = '{num:02d}'.format(num = talk.folder.parentFolder.month)
-        uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, month, talk.simpleTitle())
+        uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, month, talk.simpleTitle)
         l = Link(format = contentFormat,
                  URI = uri,
                  contentItem = talk)
