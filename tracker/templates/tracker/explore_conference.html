@@ -27,13 +27,15 @@
 <a href="/general-conference/{{ sort_by }}s/{{ category }}/">
   <div class="columns small-12 large-6 end">  
     <div class="content-link">
-      <div class="columns small-8">
+      <div class="columns {% if request.user.is_authenticated %}small-8{% else %}small-12{% endif %}">
           <h3>{{ category }}</h3></a>
       </div>
+      {% if request.user.is_authenticated %}
       <div class="completion-ratio columns small-4">
         <span>{{ category.num_completed }}/{{ category.num_total }}</span>
         <canvas width="50" height="50"></canvas>
       </div>
+      {% endif %}
       
     </div>
   </div>
