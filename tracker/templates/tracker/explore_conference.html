@@ -12,15 +12,12 @@
 
 {% block sub_navigation %}
 <div id="sub-navigation" class="row">
-    <div class="small-4 large-2 columns">
+    <div class="small-6 large-2 columns">
       <a href="/general-conference/sessions/"{% if sort_by == "session" %} class="current-nav" {% endif %}>Sessions</a>
     </div>
-    <div class="small-4 large-2 columns">
+    <div class="small-6 large-2 columns end">
       <a href="/general-conference/speakers/"{% if sort_by == "speaker" %} class="current-nav" {% endif %}>Speaker</a>
     </div>
-    <div class="small-4 large-2 columns end">
-      <a href="/general-conference/topics/"{% if sort_by == "topic" %} class="current-nav" {% endif %}>Topic</a>
-    </div>  
   </div>
 </div>
 {% endblock %}
