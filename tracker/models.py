@@ -90,6 +90,11 @@ class ConferenceTalk(ContentItem):
         embedLink = '//www.youtube.com/embed/' + uniqueId
         return embedLink
 
+    def hasYouTubeLink(self):
+        if len(self.link_set.filter(format__container='YouTube')) >= 1:
+            return True
+        return False
+
 class Completion(models.Model):
     user = models.ForeignKey(User)
     dateCompleted = models.DateTimeField('Date Completed')

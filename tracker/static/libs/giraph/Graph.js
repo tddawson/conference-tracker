@@ -31,7 +31,6 @@ Graph.prototype.attachCanvasById = function(divID)
 
 Graph.prototype.attachCanvas = function(canvas) 
 {
-	console.log(canvas);
 	this.canvas = canvas;
 	this.context = this.canvas.getContext('2d');
 }

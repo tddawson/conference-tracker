@@ -7,7 +7,6 @@ $(document).ready(function() {
 		var complete = parseInt(s[0]);
 		var incomplete = parseInt(s[1]) - complete;
 		
-		//console.log(canvas);
 		drawPieChart(canvas, complete, incomplete);
 	});
 
