@@ -103,13 +103,15 @@ def conference_talks_by_topic(request, topic):
 
 def conference_talk(request, talk):
 	talk = ConferenceTalk.objects.filter(simpleTitle=talk)[0]
+	more_from_session = ConferenceTalk.objects.filter(folder__parentFolder__name=talk.folder.parentFolder).exclude(simpleTitle=talk.simpleTitle)[:5]
+	more_by_speaker = ConferenceTalk.objects.filter(author=talk.author).exclude(simpleTitle=talk.simpleTitle)[:5]
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
 		completed = len(Completion.objects.filter(user=user, content=talk)) == 1
 	else:
 		completed = False
 
-	context = {'talk': talk, 'completed': completed}
+	context = {'talk': talk, 'completed': completed, 'more_from_session': more_from_session, 'more_by_speaker': more_by_speaker}
 	return render(request, 'tracker/talk.html', context)
 
 
