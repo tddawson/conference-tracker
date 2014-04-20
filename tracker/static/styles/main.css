@@ -212,6 +212,31 @@ a.attention-link.green-button:hover {
 	border-radius: 3px;
 }
 
+.progress-tracker {
+	background: #6ca;
+	width: 0%;
+	height: 5px;
+	margin-top: 1em;
+	float: left;
+	clear: both;
+}
+
+.progress-tracker:after {
+	content: attr(data-content);
+	float: right;
+	color: #6ca;
+	margin-top: -8px;
+	font-weight: bold;
+	font-size: smaller;
+	margin-right:-25px;
+}
+
+.completion-ratio {
+	font-size:large;
+	text-align:center;
+	margin-top:20px;
+}
+
 @media all and (max-width: 64.063em) {
 
 	#home-blurb {
