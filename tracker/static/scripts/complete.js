@@ -2,7 +2,8 @@ $(document).ready(function() {
 	$('.check-link').on("click", function() {
 		var fullId = this.id;
 		var id = fullId.split("-")[1];
-		markComplete(id);
+		if (!isBusy(id))
+			markComplete(id);
 	});
 });
 
@@ -29,6 +30,10 @@ function markComplete(id) {
 			resetCheckIcon(id);
 		}
 	});
+}
+
+function isBusy(id) {
+	return $('#check-' + id + " i").hasClass("fa-refresh");
 }
 
 function showWaitingIcon(id) {
