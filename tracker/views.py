@@ -26,23 +26,23 @@ def home(request):
 		return render(request, 'tracker/home.html', {"most_popular":talks})
 
 
-def conference_sessions(request):
-	sessions = Conference.objects.filter(parentFolder__name='General Conference')
+def conference_conferences(request):
+	conferences = Conference.objects.filter(parentFolder__name='General Conference')
 
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
-		for session in sessions:
-			talks_in_session = ConferenceTalk.objects.filter(folder__parentFolder__name=session)
-			session.num_total = len(talks_in_session)
-			session.num_completed = len(Completion.objects.filter(user=user, content__in=talks_in_session))
-			month_num = session.month
+		for conference in conferences:
+			talks_in_conference = ConferenceTalk.objects.filter(folder__parentFolder__name=conference)
+			conference.num_total = len(talks_in_conference)
+			conference.num_completed = len(Completion.objects.filter(user=user, content__in=talks_in_conference))
+			month_num = conference.month
 			if month_num == 10:
 				month = "October"
 			else:
 				month = "April"
-			session.display_name = "%s %d" % (month, session.year)
+			conference.display_name = "%s %d" % (month, conference.year)
 
-	context = {'categories': sessions, "sort_by": "session"}
+	context = {'categories': conferences, "sort_by": "conference"}
 	return render(request, 'tracker/explore_conference.html', context)
 
 
@@ -67,8 +67,8 @@ def conference_topics(request):
 	context = {'categories': topics, "sort_by": "topic"}
 	return render(request, 'tracker/explore_conference.html', context)
 
-def conference_talks_by_session(request, session):
-	talks = ConferenceTalk.objects.filter(folder__parentFolder__name=session)
+def conference_talks_by_conference(request, conference):
+	talks = ConferenceTalk.objects.filter(folder__parentFolder__name=conference)
 
 
 	if request.user.is_authenticated():
@@ -79,10 +79,10 @@ def conference_talks_by_session(request, session):
 	else:
 		pks = []
 		user = User()
-		month = Conference.objects.filter(name=session)[0].month #session.parentFolder.month
+		month = Conference.objects.filter(name=conference)[0].month #conference.parentFolder.month
 		
 
-	context = {'talks': talks, 'folder': session, 'pks': pks, 'user': user}
+	context = {'talks': talks, 'folder': conference, 'pks': pks, 'user': user}
 	return render(request, 'tracker/choose_talk.html', context)
 
 def conference_talks_by_speaker(request, speaker):
@@ -111,7 +111,7 @@ def conference_talks_by_topic(request, topic):
 
 def conference_talk(request, talk):
 	talk = ConferenceTalk.objects.filter(simpleTitle=talk)[0]
-	more_from_session = ConferenceTalk.objects.filter(folder__parentFolder__name=talk.folder.parentFolder).exclude(simpleTitle=talk.simpleTitle)[:5]
+	more_from_conference = ConferenceTalk.objects.filter(folder__parentFolder__name=talk.folder.parentFolder).exclude(simpleTitle=talk.simpleTitle)[:5]
 
 	more_by_speaker = ConferenceTalk.objects.filter(author=talk.author).exclude(simpleTitle=talk.simpleTitle)[:5]
 	if request.user.is_authenticated():
@@ -125,7 +125,7 @@ def conference_talk(request, talk):
 		completed = False
 		pks = []
 
-	context = {'talk': talk, 'completed': completed, 'more_from_session': more_from_session, 'more_by_speaker': more_by_speaker, 'pks': pks}
+	context = {'talk': talk, 'completed': completed, 'more_from_conference': more_from_conference, 'more_by_speaker': more_by_speaker, 'pks': pks}
 	return render(request, 'tracker/talk.html', context)
 
 
