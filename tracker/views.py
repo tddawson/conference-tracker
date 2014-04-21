@@ -73,7 +73,8 @@ def conference_talks_by_session(request, session):
 	else:
 		pks = []
 		user = User()
-
+		month = Conference.objects.filter(name=session)[0].month #session.parentFolder.month
+		
 
 	context = {'talks': talks, 'folder': session, 'pks': pks, 'user': user}
 	return render(request, 'tracker/choose_talk.html', context)
@@ -162,4 +163,4 @@ def profile(request):
 def logout(request):
 	"""Logs out user"""
 	auth_logout(request)
-	return render_to_response('tracker/home.html', {"most_popular":mostPopularItems()}, RequestContext(request))
+	return render_to_response('tracker/logout.html', {'dont_redirect':True}, RequestContext(request))

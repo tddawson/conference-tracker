@@ -37,7 +37,7 @@
 
           <a href="/logout/" class="attention-link">Logout</a>
     {% else %}
-      <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}"  class="attention-link">Login</a>
+      <a href="{% url 'social:begin' 'facebook' %}?next={% if dont_redirect %}/home/{% else %}{{ request.path }}{% endif %}"  class="attention-link">Login</a>
     {% endif %}
   </div>
 </div>
