@@ -1,18 +1,26 @@
 {% extends "tracker/base.html" %}
-
+{% load static %}
 {% block title %} Home {% endblock %}
+{% block scripts%}
+<script src="{% static "scripts/drawgraphs.js" %}"></script>
+{% endblock %}
 
 {% block content %}
   <div class="small-12 large-6 columns">
     <div>
       <h2>Progress</h2>
-      <a href="/general-conference/sessions">
-        <div class="condensed content-link">
-          <div class="columns small-12">
-            <h3>All Talks</h3>
-          </div>
-        </div>
-      </a>
+<a href="/general-conference/sessions/">
+    <div class="content-link">
+      <div class="columns small-10">
+          <h3>All Talks</h3></a>
+      </div>
+      <div class="completion-ratio columns small-2">
+        {{ num_completed_talks }}/{{ num_total_talks }}
+      </div>
+
+      <span class="progress-tracker"></span>
+    </div>
+</a>
     </div>
     <div>
       <h2>Recently Completed</h2>

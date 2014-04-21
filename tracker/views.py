@@ -17,8 +17,9 @@ def home(request):
 		user = User.objects.get(pk=request.user.id)
 		# Get 5 most recently completed items
 		completed_items = Completion.objects.filter(user__pk=user.pk).order_by('pk').reverse()[:5]
-
-		context = {"user":user, "completed_items":completed_items, "most_popular":talks}
+		num_completed_talks = len(Completion.objects.filter(user__pk=user.pk))
+		num_total_talks = len(ConferenceTalk.objects.all())
+		context = {"user":user, "completed_items":completed_items, "most_popular":talks, "num_completed_talks":num_completed_talks, "num_total_talks":num_total_talks}
 
 		return render(request, 'tracker/home_logged_in.html', context)
 	else:
