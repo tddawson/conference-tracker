@@ -26,7 +26,7 @@
   <div class="small-4 large-1 columns" id="home-button">
     <a href="/home/">
     {% if request.user.is_authenticated %}
-    <img src="http://graph.facebook.com/{{ user }}/picture?width=35&height=35" class="profile_picture" />
+    <img src="http://graph.facebook.com/{{ user.username }}/picture?width=35&height=35" class="profile_picture" />
     {% else %}
     <i class="fa fa-home fa-2x"></i>
     {% endif %}

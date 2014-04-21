@@ -132,6 +132,7 @@ def mark_complete(request, content_id):
 		
 		# No completed item recorded, save it!
 		completion = Completion(user=user, dateCompleted=date, content=talk)
+		
 		completion.save()
 	except:
 		e = sys.exc_info()[0]

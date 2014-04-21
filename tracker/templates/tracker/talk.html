@@ -28,29 +28,7 @@
 </div>
 {% endif %}
 <div class="small-12 large-4 columns">
-  <div class="small-12 large-4 columns" style="margin-bottom:20px">
-  	<div class="fb-like" data-href="{{ request.path }}" data-type="button_count" data-action="like" data-share="true" data-show-faces="true">
-	 </div>
-  </div>
-
-    {% if request.user.is_authenticated %}
-    <a id="check-{{ talk.pk }}" class="check-link" style="display:block">
-    <div class="content-link">
-      <div class="columns small-10">
-        <h3>Mark as completed</h3>
-      </div>
-      <div class="{% if completed  %}checked{% else %}unchecked{% endif %} columns small-2 clear check-box">
-        <i class="fa fa-check fa-2x"></i>
-      </div>
-    </div>
-    </a>
-    {% else %}
-    <h3>Login to Track Your Study!</h3>
-    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="attention-link green">Connect with Facebook</a>
-    {% endif %}
-    <br />
-    <hr />
-    <br />
+ 
   {% for link in talk.smallLinks %}
      <a href="{{ link.URI }}" target="_blank">
         <div>
@@ -68,9 +46,33 @@
     </a>
   {% endfor %}
 
+<hr />
+<div class="small-12 columns" style="margin-bottom:20px">
+  	<div class="fb-like" data-href="{{ request.path }}" data-type="button_count" data-action="like" data-share="true" data-show-faces="true">
+	 </div>
+  </div>
 
+
+
+    {% if request.user.is_authenticated %}
+    <a id="check-{{ talk.pk }}" class="check-link" style="display:block">
+    <div class="content-link">
+      <div class="columns small-10">
+        <h3>Mark as completed</h3>
+      </div>
+      <div class="{% if completed  %}checked{% else %}unchecked{% endif %} columns small-2 clear check-box">
+        <i class="fa fa-check fa-2x"></i>
+      </div>
+    </div>
+    </a>
+    {% else %}
+    <h3>Login to Track Your Study!</h3>
+
+    <a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="attention-link green">Connect with Facebook</a>
+    {% endif %}
+ 
 </div>
-  
+ <div class="small-12 columns"></div> 
   <div class="small-12 large-6 columns">
     <h2>More from session</h2>
   
