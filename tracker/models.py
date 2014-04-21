@@ -98,7 +98,7 @@ class ConferenceTalk(ContentItem):
 class Completion(models.Model):
     user = models.ForeignKey(User)
     dateCompleted = models.DateTimeField('Date Completed')
-    content = models.OneToOneField(ContentItem)
+    content = models.ForeignKey(ContentItem)
 
 
 def mostPopularItems():
