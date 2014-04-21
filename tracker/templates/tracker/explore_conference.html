@@ -25,7 +25,7 @@
   <div class="columns small-12 large-6 end">  
     <div class="content-link">
       <div class="columns {% if request.user.is_authenticated %}small-10{% else %}small-12{% endif %}">
-          <h3>{{ category }}</h3></a>
+          <h3>{% if category.display_name %}{{ category.display_name }}{% else %}{{ category }}{% endif %}</h3></a>
       </div>
       {% if request.user.is_authenticated %}
       <div class="completion-ratio columns small-2">
