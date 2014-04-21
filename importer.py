@@ -165,9 +165,8 @@ class Importer:
                                             container = 'LDS.org')
             contentFormat.save()
 
-        year = talk.folder.parentFolder.year
-        month = '{num:02d}'.format(num = talk.folder.parentFolder.month)
-        uri = 'https://www.lds.org/general-conference/{}/{}/{}'.format(year, month, talk.simpleTitle)
+        urlPostfix = talk.getUrlPostfix()
+        uri = 'https://www.lds.org/general-conference/' + urlPostfix
         l = Link(format = contentFormat,
                  URI = uri,
                  contentItem = talk)

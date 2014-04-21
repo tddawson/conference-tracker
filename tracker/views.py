@@ -109,8 +109,9 @@ def conference_talks_by_topic(request, topic):
 	return render(request, 'tracker/choose_talk.html', context)
 
 
-def conference_talk(request, talk):
-	talk = ConferenceTalk.objects.filter(simpleTitle=talk)[0]
+def conference_talk(request, year, month, talk):
+	conference = Conference.objects.get(year=year, month=month)
+	talk = ConferenceTalk.objects.filter(simpleTitle=talk, folder__parentFolder__pk=conference.pk)[0]
 	more_from_session = ConferenceTalk.objects.filter(folder__parentFolder__name=talk.folder.parentFolder).exclude(simpleTitle=talk.simpleTitle)[:5]
 
 	more_by_speaker = ConferenceTalk.objects.filter(author=talk.author).exclude(simpleTitle=talk.simpleTitle)[:5]

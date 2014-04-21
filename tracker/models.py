@@ -31,8 +31,6 @@ class Folder(models.Model):
         return simpleName
 
 class ContentItem(models.Model):
-    #title = models.CharField(max_length = 200)
-    #author = models.ForeignKey(Author)
     folder = models.ForeignKey(Folder)
     tags = models.ManyToManyField(Tag)
 
@@ -80,6 +78,15 @@ class ConferenceTalk(ContentItem):
         simpleTitle = re.sub('[\s]', '-', self.title)
         simpleTitle = re.sub('[^\w-]', '', simpleTitle)
         return simpleTitle
+
+    def getUrlPostfix(self):
+        conference = self.getConference()
+        urlPostfix = "{}/{}/{}".format(conference.year, conference.month, self.getSimpleTitle())
+        return urlPostfix
+
+    def getConference(self):
+        conference = Conference.objects.get(folder_ptr_id=self.folder.parentFolder.pk)
+        return conference
 
     def smallLinks(self):
         return self.link_set.filter(~Q(format__container='YouTube'))

@@ -78,7 +78,7 @@
   
     {% for talk in more_from_session %}
         <div class="content-link condensed">
-          <a href="/general-conference/talks/{{talk.simpleTitle}}">
+          <a href="/general-conference/talks/{{ talk.getUrlPostfix }}">
             <div class="columns {% if request.user.is_authenticated %}small-10 {% else %}small-12{% endif %}">
               <h3>{{ talk.title }}</h3>
               <h4>{{ talk.author }}</h4>
@@ -105,7 +105,7 @@
 
         {% for talk in more_by_speaker %}
         <div class="content-link condensed">
-          <a href="/general-conference/talks/{{talk.simpleTitle}}">
+          <a href="/general-conference/talks/{{ talk.getUrlPostfix }}">
             <div class="columns {% if request.user.is_authenticated %}small-10 {% else %}small-12{% endif %}">
               <h3>{{ talk.title }}</h3>
               <h4>{{ talk.author }}</h4>
