@@ -23,7 +23,7 @@
 {% for talk in talks %}
   <div class="small-12 large-6 columns end">
     <div class="content-link">
-      <a href="/general-conference/talks/{{talk.simpleTitle}}">
+      <a href="/general-conference/talks/{{ talk.getUrlPostfix }}">
         <div class="columns {% if request.user.is_authenticated %}small-10 {% else %}small-12{% endif %}">
           <h3>{{ talk.title }}</h3>
           <h4>{{ talk.author }}</h4>
