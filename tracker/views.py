@@ -16,13 +16,13 @@ def home(request):
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
 		# Get 5 most recently completed items
-		completed_items = Completion.objects.filter(user__pk=user.pk).order_by('pk').reverse()[:5]
+		completed_items = Completion.objects.filter(user__pk=user.pk)
+		recently_completed_items = completed_items.order_by('pk').reverse()[:5]
 		num_completed_talks = len(Completion.objects.filter(user__pk=user.pk))
 		num_total_talks = len(ConferenceTalk.objects.all())
-		completed_items = Completion.objects.filter(user__pk=user.pk)
                 pks = [item.content.pk for item in completed_items]
 
-		context = {"user":user, "completed_items":completed_items, "most_popular":talks, "num_completed_talks":num_completed_talks, "num_total_talks":num_total_talks, "pks":pks}
+		context = {"user":user, "recently_completed_items":recently_completed_items, "most_popular":talks, "num_completed_talks":num_completed_talks, "num_total_talks":num_total_talks, "pks":pks}
 
 
 		return render(request, 'tracker/home_logged_in.html', context)
