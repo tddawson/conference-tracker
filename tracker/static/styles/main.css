@@ -247,6 +247,32 @@ a.attention-link.blue:hover {
 	margin-top:20px;
 }
 
+#footer {
+	margin-top:40px;
+	width:100%;
+	background:#363636;
+	border-radius:3px 3px 0px 0px;
+}
+
+#footer ul {
+	list-style: none;
+}
+
+#footer ul li {
+	float:left;
+}
+
+#footer ul li a {
+	float:left;
+	line-height:40px;
+	padding:0px 20px;
+	color:#eee;
+}
+
+#footer ul li a:hover {
+	color: #fff;
+}
+
 @media all and (max-width: 64.063em) {
 
 	#home-blurb {
