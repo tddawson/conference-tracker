@@ -8,7 +8,8 @@
 	<div style="position:relative;">
 	<div id="home-blurb" class="small-6 small-offset-6">	
 		<h2>Easily track, discover, and share gospel content.</h2>
-		<a class="attention-link explore-link green" href="/general-conference/conferences/">Get started &raquo;</a>
+		<a class="attention-link explore-link blue" href="{% url 'social:begin' 'facebook' %}?next={% if dont_redirect %}/home/{% else %}{{ request.path }}{% endif %}">Connect With Facebook</a>
+		<a class="attention-link explore-link green" href="/general-conference/conferences/">Explore</a>
 	</div>
 	</div>
 	<div class="small-12 large-6 columns">
@@ -50,7 +51,8 @@
 				<!--</div>-->
 			<!--</a>-->
 		<!--</div>-->
-		<a href="/general-conference/conferences" class="explore-link attention-link columns small-4 end" style="margin-top:20px;	">Explore All Talks &raquo;</a>
+
+		<a href="/general-conference/conferences" class="explore-link attention-link columns small-4 end" style="margin-top:20px;">Explore All Talks &raquo;</a>
 	</div>
 
 {% endblock %}

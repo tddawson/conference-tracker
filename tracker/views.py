@@ -32,6 +32,13 @@ def home(request):
 
 def conference_conferences(request):
 	conferences = Conference.objects.filter(parentFolder__name='General Conference')
+	for conference in conferences:
+		month_num = conference.month
+		if month_num == 10:
+			month = "October"
+		else:
+			month = "April"
+		conference.display_name = "%s %d" % (month, conference.year)
 
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
@@ -39,12 +46,9 @@ def conference_conferences(request):
 			talks_in_conference = ConferenceTalk.objects.filter(folder__parentFolder__name=conference)
 			conference.num_total = len(talks_in_conference)
 			conference.num_completed = len(Completion.objects.filter(user=user, content__in=talks_in_conference))
-			month_num = conference.month
-			if month_num == 10:
-				month = "October"
-			else:
-				month = "April"
-			conference.display_name = "%s %d" % (month, conference.year)
+			
+
+
 
 	context = {'categories': conferences, "sort_by": "conference"}
 	return render(request, 'tracker/explore_conference.html', context)

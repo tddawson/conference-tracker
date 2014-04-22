@@ -207,6 +207,17 @@ a.attention-link.green-button:hover {
 	background:#6ca;
 }
 
+a.attention-link.blue {
+	background:#037E8C;
+	font-weight:bold;
+	padding:1em;
+	margin-top:1em;
+	float:left;
+}
+
+a.attention-link.blue:hover {
+	background:#239EAC;
+}
 
 .profile_picture {
 	border-radius: 3px;
