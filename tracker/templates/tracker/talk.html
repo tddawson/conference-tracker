@@ -20,7 +20,7 @@
 {% endblock %}
 {% block content %}
 <h2 class="small-12 columns">{{ talk.title }}</h2>
-<h4 class="small-12 columns">{{ talk.author }}</h4>
+<h4 class="small-12 columns"><strong>{{ talk.author }},</strong> {{ talk.getConference.getFullDate }}</h4>
 
 {% if talk.hasYouTubeLink %}
 <div class="small-12 large-8 columns">
@@ -74,7 +74,7 @@
 </div>
  <div class="small-12 columns"></div> 
   <div class="small-12 large-6 columns">
-    <h2>More from this conference</h2>
+    <h2>More from {{ talk.getConference.getFullDate }}</h2>
   
     {% for talk in more_from_conference %}
         <div class="content-link condensed">
@@ -101,7 +101,7 @@
     </a>
   </div>
   <div class="small-12 large-6 columns">
-    <h2>More from this speaker</h2>
+    <h2>More by {{ talk.author }}</h2>
 
         {% for talk in more_by_speaker %}
         <div class="content-link condensed">

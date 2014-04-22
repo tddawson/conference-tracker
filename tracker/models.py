@@ -66,6 +66,12 @@ class Conference(Folder):
     year = models.IntegerField()
     month = models.IntegerField()
 
+    def getFullDate(self):
+        if self.month == 4:
+            return "April %d" % (self.year)
+        return "October %d" % (self.year)
+        
+
 class ConferenceTalk(ContentItem):
     title = models.CharField(max_length=200)
     simpleTitle = models.CharField(max_length=200)
