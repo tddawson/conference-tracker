@@ -33,12 +33,7 @@ def home(request):
 def conference_conferences(request):
 	conferences = Conference.objects.filter(parentFolder__name='General Conference')
 	for conference in conferences:
-		month_num = conference.month
-		if month_num == 10:
-			month = "October"
-		else:
-			month = "April"
-		conference.display_name = "%s %d" % (month, conference.year)
+		conference.display_name = conference.getFullDate()
 
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
