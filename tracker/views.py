@@ -18,16 +18,14 @@ def home(request):
 		# Get 5 most recently completed items
 		completed_items = Completion.objects.filter(user__pk=user.pk)
 		recently_completed_items = completed_items.order_by('pk').reverse()[:5]
-		num_completed_talks = len(Completion.objects.filter(user__pk=user.pk))
+		num_completed_talks = len(completed_items)
 		num_total_talks = len(ConferenceTalk.objects.all())
-                pks = [item.content.pk for item in completed_items]
-
+		pks = [item.content.pk for item in completed_items]
 		context = {"user":user, "recently_completed_items":recently_completed_items, "most_popular":talks, "num_completed_talks":num_completed_talks, "num_total_talks":num_total_talks, "pks":pks}
 
-
 		return render(request, 'tracker/home_logged_in.html', context)
-	else:
-		return render(request, 'tracker/home.html', {"most_popular":talks})
+	
+	return render(request, 'tracker/home.html', {"most_popular":talks})
 
 
 def conference_conferences(request):
@@ -158,6 +156,19 @@ def mark_complete(request, content_id):
 		return HttpResponse(e)
 
 	return HttpResponse("Added")
+
+
+def completed_talks(request):
+	if request.user.is_authenticated():
+		user = User.objects.get(pk=request.user.id)
+		talks = Completion.objects.filter(user__pk=pk)
+		context = {'talks': talks}
+		return render(request, 'tracker/completed_talks.html', context)
+
+	return render(request, 'tracker/not_logged_in.html', {})
+
+
+	
 
 def profile(request):
 	"""After logging in"""

@@ -1,0 +1,42 @@
+{% extends "tracker/base.html" %}
+{% load static %}
+
+{% block title %} General Conference - All completed talks{% endblock %}
+
+{% block scripts %}
+<script src="{% static "scripts/complete.js" %}"></script>
+{% endblock %}
+
+{% block sub_navigation %}
+<div id="sub-navigation" class="row">
+    <div class="small-6 large-2 columns">
+      <a href="/general-conference/conferences/">Conferences</a>
+    </div>
+    <div class="small-6 large-2 columns end">
+      <a href="/general-conference/speakers/">Speaker</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<h2 class="columns small-12">Talks You've Completed</h2>
+{% for talk in talks %}
+  <div class="small-12 large-6 columns end">
+    <div class="content-link">
+      <a href="/general-conference/talks/{{ talk.getUrlPostfix }}">
+        <div class="columns small-10">
+          <h3>{{ talk.title }}</h3>
+          <h4>{{ talk.author }}</h4>
+        </div>
+      </a>
+      <a id="check-{{ talk.pk }}" class="check-link" style="display:block">
+      <div class="checked columns small-2 check-box">
+        <i class="fa fa-check fa-4x"></i>
+      </div>
+      </a>
+    </div>
+  </div>
+{% endfor %}
+
+{% endblock %}

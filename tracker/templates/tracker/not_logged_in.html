@@ -1,0 +1,24 @@
+{% extends "tracker/base.html" %}
+{% load static %}
+
+{% block title %} General Conference - Login {% endblock %}
+
+
+{% block sub_navigation %}
+<div id="sub-navigation" class="row">
+    <div class="small-6 large-2 columns">
+      <a href="/general-conference/conferences/">Conferences</a>
+    </div>
+    <div class="small-6 large-2 columns end">
+      <a href="/general-conference/speakers/">Speaker</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block content %}
+<div class="columns small-12">
+<h2>Please Login</h2>
+<p>You must be logged in to access this feature.</p>
+<a href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" class="attention-link blue">Connect with Facebook</a>
+</div>
+{% endblock %}
