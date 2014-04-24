@@ -161,7 +161,8 @@ def mark_complete(request, content_id):
 def completed_talks(request):
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
-		talks = Completion.objects.filter(user__pk=pk)
+		completed_items = Completion.objects.filter(user__pk=user.pk)
+		talks = [item.content.conferencetalk for item in completed_items]
 		context = {'talks': talks}
 		return render(request, 'tracker/completed_talks.html', context)
 
