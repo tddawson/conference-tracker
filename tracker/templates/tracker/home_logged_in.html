@@ -35,7 +35,9 @@
         </div>
       </a>
       {% endfor %}
+	{% if num_completed_talks > 5 %}
       <a href="/general-conference/completed/" class="attention-link green">More &raquo;</a>
+	{% endif %}
     </div>
   </div>
   <div class="small-12 large-6 columns">
