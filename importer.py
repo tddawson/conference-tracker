@@ -166,7 +166,7 @@ class Importer:
             contentFormat.save()
 
         urlPostfix = talk.getUrlPostfix()
-        uri = 'https://www.lds.org/general-conference/' + urlPostfix
+        uri = 'http://www.lds.org/general-conference/' + urlPostfix
         l = Link(format = contentFormat,
                  URI = uri,
                  contentItem = talk)

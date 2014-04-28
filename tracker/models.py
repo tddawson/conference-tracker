@@ -66,6 +66,11 @@ class Conference(Folder):
     year = models.IntegerField()
     month = models.IntegerField()
 
+    def twoDigitMonth(self):
+        if self.month == 4:
+            return "04"
+        return "10"
+
     def getFullDate(self):
         if self.month == 4:
             return "April %d" % (self.year)
@@ -81,13 +86,13 @@ class ConferenceTalk(ContentItem):
         return self.title
 
     def getSimpleTitle(self):
-        simpleTitle = re.sub('[\s]', '-', self.title)
-        simpleTitle = re.sub('[^\w-]', '', simpleTitle)
+        simpleTitle = re.sub(u'[\s\u2014]', u'-', self.title, re.UNICODE)
+        simpleTitle = re.sub(u'[^\w\-\u2014]', u'', simpleTitle, re.UNICODE)
         return simpleTitle
 
     def getUrlPostfix(self):
         conference = self.getConference()
-        urlPostfix = "{}/{}/{}".format(conference.year, conference.month, self.getSimpleTitle())
+        urlPostfix = "{}/{}/{}".format(conference.year, conference.twoDigitMonth(), self.getSimpleTitle())
         return urlPostfix
 
     def getConference(self):
