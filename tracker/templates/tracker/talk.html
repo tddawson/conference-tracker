@@ -122,9 +122,10 @@
         </div>
       
     {% endfor %}
-    {% if more_by_speaker %}
+
+    {% if num_by_speaker > 5 %}
     <a href="/general-conference/speakers/{{ talk.author }}/" class="attention-link green">More &raquo;</a>
-    {% else %}
+    {% elif num_by_speaker == 0 %}
     <p>
       There aren't any other talks available by this speaker.
     </p>

@@ -116,19 +116,22 @@ def conference_talk(request, year, month, talk):
 	talk = ConferenceTalk.objects.filter(simpleTitle=talk, folder__parentFolder__pk=conference.pk)[0]
 	more_from_conference = ConferenceTalk.objects.filter(folder__parentFolder__name=talk.folder.parentFolder).exclude(simpleTitle=talk.simpleTitle)[:5]
 
-	more_by_speaker = ConferenceTalk.objects.filter(author=talk.author).exclude(simpleTitle=talk.simpleTitle)[:5]
+	more_by_speaker = ConferenceTalk.objects.filter(author=talk.author).exclude(simpleTitle=talk.simpleTitle)
+	num_by_speaker = len(more_by_speaker)
+	more_by_speaker = more_by_speaker[:5]
+
 	if request.user.is_authenticated():
 		user = User.objects.get(pk=request.user.id)
 		completed = len(Completion.objects.filter(user=user, content=talk)) == 1
-                pk = user.pk
-                completed_items = Completion.objects.filter(user__pk=pk)
-                pks = [item.content.pk for item in completed_items]
+		pk = user.pk
+		completed_items = Completion.objects.filter(user__pk=pk)
+		pks = [item.content.pk for item in completed_items]
 
 	else:
 		completed = False
 		pks = []
 
-	context = {'talk': talk, 'completed': completed, 'more_from_conference': more_from_conference, 'more_by_speaker': more_by_speaker, 'pks': pks}
+	context = {'talk': talk, 'completed': completed, 'more_from_conference': more_from_conference, 'more_by_speaker': more_by_speaker, 'num_by_speaker': num_by_speaker, 'pks': pks}
 	return render(request, 'tracker/talk.html', context)
 
 
